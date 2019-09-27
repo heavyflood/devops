@@ -1,0 +1,47 @@
+0. Pre-Install
+    yum update && upgrade
+    yum search openjdk
+    yum install java-1.8.0-openjdk.x86_64
+
+1. Docker-Install
+    yum install -y yum-utils device-mapper-persistent-data lvm2
+    yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    yum -y install docker-ce
+    systemctl enable docker.service
+    systemctl start docker.service 
+    systemctl status docker.service
+
+2. Docker-Compose Install
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+
+3. Kubernetes Install
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+yum install -y kubectl
+
+4. Helm Install
+wget https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz
+tar zxvf helm-v2.13.1-linux-amd64.tar.gz
+sudo mv linux-amd64/helm /usr/local/bin/helm
+helm init : Tiller Install 
+
+5. Skaffold Install
+curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-darwin-amd64
+chmod +x skaffold
+sudo mv skaffold /usr/local/bin
+
+vim /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+10.41.172.151 devops-jw
+10.41.178.164 devops-test
+
+
