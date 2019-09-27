@@ -1,0 +1,92 @@
+node {
+    def jarFile = ''
+    def script = "; envsubst < deployment.yaml > deployment.yaml"
+    
+    stage('checkout') {
+        checkout(
+            [
+                $class: 'GitSCM',
+                additionalCredentials: [],
+                excludedCommitMessage: '',
+                excludedRegions: '',
+                excludedRevprop: '',
+                excludedUsers: '',
+                filterChangelog: false,
+                ignoreDirPropChanges: false,
+                includedRegions: '',
+                branches: [[name: '*/master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: '인증키', url: 'repo']]
+            ]
+        )
+    }
+
+    stage('unit-test') {
+        sh "chmod +x ./gradlew"
+        sh "./gradlew clean test --info"
+    }
+
+    stage('initialize') {
+        sh "chmod +x ./gradlew"
+        appName = sh(script: "./gradlew properties -q | grep \"name\" | awk '{print\$2}'", returnStdout: true).trim()
+        groupName = sh(script: "./gradlew properties -q | grep \"group\" | awk '{print\$2}'", returnStdout: true).trim()
+        appVersion = sh(script: "./gradlew properties -q | grep \"version\" | awk '{print\$2}'", returnStdout: true).trim()
+        jarFile = appName + '-' + appVersion + '.jar'
+    }
+
+    stage('build') {
+        sh "./gradlew build"
+    }
+
+    stage('archieve & docker build') {
+        parallel(
+            "Archive Artifacts" : {
+                archiveArtifacts artifacts: '**/build/libs/' + appName + '-' + appVersion + '.jar'
+            },
+            "Docker ImagePush": {
+                sh 'mv build/libs/' + jarFile + ' ./app.jar'
+                sh 'docker container ls -a -f name=app -q | xargs -r docker container stop'
+                sh 'docker container ls -a -f name=app -q | xargs -r docker container rm'
+                sh 'docker rmi -f localhost:5000/app'
+                sh 'docker image build -t app --no-cache . '
+                sh 'docker image tag app localhost:5000/app '
+                sh 'docker image push localhost:5000/app'
+                sh 'docker run --name=app -d -p 9091:9091 localhost:5000/app .'
+            }
+        )
+    }
+
+    stage('kube') {
+            
+        sh 'kubectl apply -n devops -f elasticsearch_statefulset.yaml'
+        sh 'kubectl rollout status sts/es-cluster --namespace=devops'
+        sh 'kubectl port-forward es-cluster-0 9200:9200 --namespace=devops'
+        sh 'kubectl create -f -n devops kibana.yaml'
+        sh 'kubectl rollout status deployment/kibana --namespace=devops'
+        sh 'kubectl get pods --namespace=devops'
+        sh 'kubectl create -f -n devops fluentd.yaml'
+        sh 'kubectl get ds --namespace=devops'
+        sh 'kubectl create -f -n devops counter.yaml'
+    }
+}
+
+# apt-get install gettext-base
+//def script = "; envsubst < deployment.yaml > deployment.yaml"
+  //sh 'export APP_NAME=' + k8sAppName + ' IMAGE=' + latestImage + script + '\''
+        sh 'mv build/libs/' + jarFile + ' ./app.jar'
+        // sh 'docker container ls -a -f name=app -q | xargs -r docker container stop'
+        // sh 'docker container ls -a -f name=app -q | xargs -r docker container rm'
+        //sh 'docker rmi -f localhost:5000/app'
+        sh 'docker image build -t app --no-cache . '
+        //sh 'docker image tag app localhost:5000/app '
+        //sh 'docker image push localhost:5000/app'
+        sh 'kubectl apply -n devops -f deployment.yaml'
+  //sh 'kubectl set image -n devops deployment/app app=localhost:5000/app'
+        echo "finished"
+
+# docker container 복사
+docker cp
+
+helm install --name efk stable/elastic-stack --namespace devops
