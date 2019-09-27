@@ -1,0 +1,205 @@
+0.  Pre-Install For CentOS
+
+    yum -y update && upgrade
+    // ==> update && upgrade centos
+
+    yum install -y java-1.8.0-openjdk.x86_64 
+    // ==> install openjdk
+
+1.  Docker Install
+
+    yum install -y yum-utils device-mapper-persistent-data lvm2
+    // ==> pre-install for install docker
+
+    yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    // ==> setting docker-repository
+
+    yum -y install docker-ce
+    // ==> docker install latest version
+
+    systemctl enable docker && systemctl start docker
+    // ==> enable && start docker 
+
+2.  docker-compose Install(install system)
+
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    // ==> docker-compose install 
+
+    sudo chmod +x /usr/local/bin/docker-compose
+    // ==> docker-compose authorization 
+
+3.  Install GitLab/Jenkins/Postgresql/Redmine/Docker-Registry With Docker-Compose
+    
+    // ==> to install Devops tools with docker-compose which enable to install easy 
+    version: '2'
+    services:
+    
+      gitlab:
+        privileged: true
+        restart: always
+        image: gitlab/gitlab-ce:latest 
+        container_name: gitlab
+        environment:
+          GITLAB_OMNIBUS_CONFIG: |
+            external_url 'http://210.89.189.207:10080'
+        depends_on:
+          - postgresql
+        ports:
+          - "10080:10080"
+          - "10022:22"
+        volumes:
+          - "/srv/docker/gitlab/gitlab:/home/git/data:Z"
+    
+      jenkins:
+        privileged: true
+        restart: always
+        image: jenkins/jenkins:lts
+        container_name: jenkins
+        user: root
+        environment:
+          JENKINS_HOST_HOME: "/data/jenkins"
+        ports:
+          - "8090:8080"
+        volumes:
+          - "/data/jenkins:/var/jenkins_home"
+          - "/var/run/docker.sock:/var/run/docker.sock"
+          - "/usr/bin/docker:/usr/bin/docker"
+    
+      postgresql:
+        privileged: true
+        restart: always
+        container_name: postgres
+        image: postgres:latest
+        ports:
+          - "5432:5432"
+        volumes:
+          - "/srv/docker/gitlab/postgresql:/var/lib/postgresql:Z"
+        environment:
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=0811
+        
+      redmine:
+        privileged: true
+        image: redmine
+        container_name: redmine
+        restart: always
+        ports:
+          - "3000:3000"
+        environment:
+          - DB_ADAPTER=postgresql
+          - DB_HOST=210.89.189.207
+          - DB_PORT=5432
+          - DB_USER=postgres
+          - DB_PASS=0811
+          - DB_NAME=redmine
+    
+      registry:
+        privileged: true
+        restart: always
+        image: registry:latest
+        container_name: registry
+        ports:
+          - "5000:5000"
+        volumes:
+          - "/srv/docker/registry:/var/lib/registry"
+
+  [Docker Common Command]
+  docker ps
+  // ==> check the container 
+
+  docker ps -a
+  // ==> check all container list 
+
+  docker images
+  // ==> check images
+
+  docker-compose up
+  // ==> setup and run docker-compose with logs
+
+  docker-compose up -d
+  // ==> setup and run docker-compose with background
+
+  docker-compose(docker) stop(down)
+  // ==> shut-down docker
+
+  docker stop(down) [container_name]
+  // ==> stop container
+
+  docker restart [container_name]
+  // ==> restart container
+
+4.  Jenkinsfile =>> Checkout SCM =>> Unit Test => Gradle Build =>> Make Archieve && Docker Build =>> Docker Run =>> Check Server OutPut
+    // ==> type code with groovy to make pipeline
+    node {
+        def jarFile = ''
+
+        stage('checkout') {
+            checkout(
+                [
+                  $class: 'GitSCM',
+                  additionalCredentials: [],
+                  excludedCommitMessage: '',
+                  excludedRegions: '',
+                  excludedRevprop: '',
+                  excludedUsers: '',
+                  filterChangelog: false,
+                  ignoreDirPropChanges: false,
+                  includedRegions: '',
+                  branches: [[name: '*/master']],
+                  doGenerateSubmoduleConfigurations: false,
+                  extensions: [],
+                  submoduleCfg: [],
+                  userRemoteConfigs: [[credentialsId: '인증키', url: 'http://210.89.189.207:10080/root/education.git']]
+                ]
+            )
+        }
+
+        stage('unit-test') {
+            sh "chmod +x ./gradlew"
+            sh "./gradlew clean test --info"
+        }
+
+        stage('initialize') {
+            sh "chmod +x ./gradlew"
+            appName = sh(script: "./gradlew properties -q | grep \"name\" | awk '{print\$2}'", returnStdout: true).trim()
+            groupName = sh(script: "./gradlew properties -q | grep \"group\" | awk '{print\$2}'", returnStdout: true).trim()
+            appVersion = sh(script: "./gradlew properties -q | grep \"version\" | awk '{print\$2}'", returnStdout: true).trim()
+            jarFile = appName + '-' + appVersion + '.jar'
+        }
+
+        stage('build') {
+            sh "./gradlew build"
+        }
+
+        stage('archieve & docker build') {
+            parallel(
+                "Archive Artifacts" : {
+                    archiveArtifacts artifacts: '**/build/libs/' + appName + '-' + appVersion + '.jar'
+                },
+                "Docker ImagePush": {
+                    sh 'mv build/libs/' + jarFile + ' ./app.jar'
+                    sh 'docker container ls -a -f name=app -q | xargs -r docker container stop'
+                    sh 'docker container ls -a -f name=app -q | xargs -r docker container rm'
+                    sh 'docker rmi -f localhost:5000/app'
+                    sh 'docker image build -t app --no-cache . '
+                    sh 'docker image tag app localhost:5000/app '
+                    sh 'docker image push localhost:5000/app'
+                    sh 'docker run --name=app -d -p 9091:9091 localhost:5000/app .'
+                }
+            )
+        }
+    }
+
+5.  Check docker-registry
+    # registry repository name
+    http://106.10.35.135:5000/v2/_catalog 
+
+    # registry tag list
+    http://106.10.35.135:5000/v2/app/tags/list
+
+6.  Github for education(실습프로젝트)
+    # 실습 프로젝트 URL
+    URL : https://github.com/devops-sicc/edusicc-step1.git
+    ID : devops-sicc
+    PW : jiwan8985@@
+    E-MAIL : jiwan8985@sicc.co.kr
