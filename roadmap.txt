@@ -1,0 +1,67 @@
+>>> DevOps Stack >>>
+- Docker
+1. docker-compose
+2. docker-registry
+3. Jenkins
+4. Redmine
+5. gitLab
+6. Harbor
+
+- Kubernetes
+1. Helm
+2. Sonaqube
+// ==> 시각화 로그
+3. Prometheus
+4. Grafana
+// ==> EFK STACK
+5. ElasticSearch
+6. Fluentd
+7. Kibana
+// ==> 성능 테스트 도구
+9. Beats
+(
+    Auditbeat
+    Filebeat
+    Functionbeat
+    Heartbeat
+    Journalbeat
+    Metricbeat
+    Packetbeat
+    Winlogbeat
+)
+// ==> 코드로 인프라를 관리
+10. Terraform
+// ==> 시스템 환경 설정 및 애플리케이션 배포 자동화 플랫폼
+11. Ansible
+// ==> Service Mesh
+12. Istio
+13. Linkerd
+14. Envoy
+// ==> repository
+15. Nexus OSS
+// ==> unit test
+16. Selenium
+// ==> 배포 자동화 툴
+17. Spinnaker
+// ==> 인프라 자동화 툴
+18. Chef
+19. OpenStack
+(
+    Cinder
+    Glance
+    Nova
+    Horizon
+    Neutron
+)
+// ==> 성능테스트
+20. Jmeter
+// ==> infra delivery
+21. Airship
+// ==> provision관리
+22. Starlingx
+// ==> 대규모 인프라 자동화관리 툴
+23. SaltStack
+// ==> 봇
+24. Bots(Jenkins Bot, Slack Bot...)
+// ==> 서버설정 자동화 툴
+25. Puppet
