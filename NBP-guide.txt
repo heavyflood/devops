@@ -1,0 +1,271 @@
+1. System update
+$ yum -y update && upgrade
+$ yum search openjdk
+$ yum install -y java-1.8.0-openjdk.x86_64 
+
+2. Install and Setup Docker
+$ sudo yum install -y yum-utils \
+  device-mapper-persistent-data \
+  lvm2
+
+$ sudo yum-config-manager \
+  --add-repo \
+  https://download.docker.com/linux/centos/docker-ce.repo
+
+$ sudo yum install -y docker-ce-18.06.3.ce-3.el7 docker-ce-cli-18.06.3.ce-3.el7 containerd.io
+$ sudo systemctl enable docker && sudo systemctl start docker
+$ sudo docker version
+
+$ sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+$ sudo chmod +x /usr/local/bin/docker-compose
+
+# jenkins, gitlab, redmine, registry
+version: '2'
+services:
+    
+  gitlab:
+    privileged: true
+    restart: always
+    privileged: true
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://49.236.136.94:10080'
+    depends_on:
+      - postgresql
+    ports:
+      - "10080:10080"
+      - "10022:22"
+    volumes:
+      - "/devops/docker/gitlab/gitlab:/home/git/data:Z"
+    
+  jenkins:
+    privileged: true
+    restart: always
+    image:  jenkins/jenkins:lts
+    container_name: jenkins
+    user: root
+    environment:
+      JENKINS_HOST_HOME: "/devops/docker/jenkins"
+    ports:
+      - "8090:8080"
+    volumes:
+      - "/devops/docker/jenkins:/var/jenkins_home"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/usr/bin/docker:/usr/bin/docker"
+    
+  postgresql:
+    privileged: true
+    restart: always
+    container_name: postgres
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - "/devops/docker/gitlab/postgresql:/var/lib/postgresql:Z"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=0811
+        
+  redmine:
+    privileged: true
+    image: redmine
+    container_name: redmine
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_ADAPTER=postgresql
+      - DB_HOST=49.236.136.94
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASS=0811
+      - DB_NAME=redmine
+
+    
+3. Install Kubectl
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+yum install -y kubectl
+
+3. Kubectl env
+  $ export KUBE_CONFIG="/devops/kubeconfig.yml"
+  $ echo $KUBE_CONFIG
+  /devops/kubeconfig.yaml
+
+  $ kubectl --kubeconfig=$KUBE_CONFIG get nodes
+  $ cp /devops/kubeconfig.yml ~/.kube/config
+
+4. Kubernetes 대시보드 접속하기
+  $ kubectl -n kube-system get secret | grep kubernetes-dashboard-token
+  $ kubectl -n kube-system describe secret kubernetes-dashboard-token-5gfxw
+  $ kubectl -n kube-system describe secret \
+  #(kubectl -n kube-system get secret | awk '/^kubernetes-dashboard-token/{print $1}') | awk '$1=="token:"{print $2}'
+
+eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC10b2tlbi01Z2Z4dyIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImNlY2IyMTE0LWRmZjMtMTFlOS1hYjliLWYyMjBjZGEzMmNmOCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlLXN5c3RlbTprdWJlcm5ldGVzLWRhc2hib2FyZCJ9.ovRDczoan8W-dA6FaoEb8cblT8CNOIt_LxRBQxr9E2yJCPt6zQCa1mE7NLy2t2E1I7leidLjXftqbCKHMFRWVcGspsdmCBFwF51mMMEz6zvHqmVeMtcTxsemZXyy3tMqZQK3JtMYuo0JJs9iOdS7XbJ1hx67T54BK2h4sVnKGgR8qNub22t3qN72BulSyANO08Q39LUR8FjCnxf2YTZRvRN_4_z5C5kfwI9pwK2kONNWT6Pv257xxdJvXLzhtDzEi4nrFF1t9euX1-lH47E6hMgl2ZL730YMIZLhxN3_rA1YzrWo-NopnI0xGIEUsT7O0x2eYmqH8ePJjjU--Xdyzw
+
+  $ kubectl proxy
+
+5. 외부도메인을 통한 Kubernetes 대시보드 접속하기
+  $ kubectl cluster-info (https://CLUSTER_ID.kr.nks.ntruss.com/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy)
+
+  [system:anonymous 권한 추가를 수행 후 위 주소로 접속]
+cat <<EOF | kubectl apply -f -
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kubernetes-dashboard-anonymous
+rules:
+- apiGroups: [""]
+  resources: ["services/proxy"]
+  resourceNames: ["https:kubernetes-dashboard:"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- nonResourceURLs: ["/ui", "/ui/*", "/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/*"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubernetes-dashboard-anonymous
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubernetes-dashboard-anonymous
+subjects:
+- kind: User
+  name: system:anonymous
+EOF
+
+  [system:anonymous 권한 삭제]
+  $ kubectl delete clusterrole kubernetes-dashboard-anonymous
+  $ kubectl delete clusterrolebinding kubernetes-dashboard-anonymous
+
+ 6. Helm 설치하기
+  Helm 설치는 OS Platform에 맞게 다음 페이지의 안내에 따라 진행합니다.
+  https://docs.helm.sh/using_helm/#installing-helm
+
+  $ mkdir helm
+  $ cd /helm
+  $ curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > install-helm.sh
+  $ chmod u+x install-helm.sh
+  $ ./install-helm.sh
+
+  [Cluster role binding 추가]
+  $ kubectl create clusterrolebinding tiller-cluster-admin \
+  --clusterrole=cluster-admin \
+  --serviceaccount=kube-system:default
+
+  [Helm 초기화]
+  $ helm init
+
+  [tiller-deploy pod 확인하기]
+  $ kubectl get pods -n kube-system -w
+
+7. Helm을 이용한 Prometheus/Grafana 설치 및 클러스터 모니터링하기
+  [Prometheus 설치]
+  $ helm repo update
+  $ kubectl create namespace jiwan
+  $ helm install --name prometheus stable/prometheus --namespace jiwan
+  $ kubectl get pods -n jiwan
+  $ vim config.yml
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: prometheus-grafana-datasource
+    namespace: jiwan
+    labels:
+      grafana_datasource: '1'
+  data:
+    datasource.yaml: |-
+      apiVersion: 1
+      datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        orgId: 1
+        url: http://prometheus-server.jiwan.svc.cluster.local
+
+  $ kubectl apply -f config.yml
+  $ kubectl get configmaps -n jiwan
+  $ vim values.yml
+  sidecar:
+  datasources:
+    enabled: true
+    label: grafana_datasource
+  $ kubectl apply -f values.yml
+  $ helm install stable/grafana --name grafana --namespace jiwan -f values.yml
+  $ kubectl --kubeconfig=$KUBE_CONFIG get secret --namespace jiwan grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+  [계정] 
+  admin
+  8bLvpZLxon1QoH9ZJzOZtWRfEEu6rFzHnKBJV9xg
+   
+  helm del --kubeconfig=$KUBE_CONFIG --purge grafana
+  
+  $ export POD_NAME=$(kubectl --kubeconfig=$KUBE_CONFIG get pods --namespace devops -l "app=grafana" -o jsonpath="{.items[0].metadata.name}")
+  $ vim ingress.yml
+  apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    name: ingress-jiwan
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      ingress.kubernetes.io/rewrite-target: /
+  spec:
+    rules:
+    - host: devops-pr.ncp.sicc.co.kr
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: prometheus-server
+            servicePort: 'http'
+    - host: devops-gr.ncp.sicc.co.kr
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: grafana
+            servicePort: 'service'
+    - host: devops-kibana.ncp.sicc.co.kr
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: kibana
+            servicePort: 443
+    - host: devops-es.ncp.sicc.co.kr
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: elasticsearch-client
+            servicePort: 'http'
+
+
+  [import]
+  https://grafana.com/dashboards/8588
+  https://grafana.com/dashboards/1621
+  https://grafana.com/grafana/dashboards/1860
+  
+https://medium.com/@chris_linguine/how-to-monitor-your-kubernetes-cluster-with-prometheus-and-grafana-2d5704187fc8
+  $ kubectl apply -f ingress.yml -n jiwan
+
+  8. Helm으로 EFK설치
+  $ helm install stable/elasticsearch --name=elasticsearch --namespace=jiwan
+  $ helm install stable/fluent-bit --name=fluent-bit --namespace=jiwan --set backend.type=es --set backend.es.host=elasticsearch-client 
+  $ helm install stable/kibana --name=kibana --namespace=jiwan --set env.ELASTICSEARCH_HOSTS=http://elasticsearch-client:9200 
+  $ kubectl -n jiwan port-forward svc/kibana 9080:443
+
+  https://prabhatsharma.in/blog/logging-in-kubernetes-using-elasticsearch-the-easy-way/
+  9. Helm으로 istio 설치
+
+  10. Helm으로 Linkerd 설치
