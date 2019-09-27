@@ -1,0 +1,31 @@
+# redmine plugin install
+$ docker exec -it redmine bash
+$ git
+$ git clone ~
+$ bundle lock --add-platform x86-mingw32 x64-mingw32 x86-mswin32
+$ bundle install --without development test
+$ bundel exec rake redmine:plugins:migrate
+$ docker stop redmine
+$ docker restart redmine
+$ docker ps 
+
+# install redmine plugin list
+-- plugins
+agile
+dashboard
+
+-- themes
+
+docker-registry
+pw: b9027652
+
+
+scp  /certs/devops-reg.ncp.sicc.co.kr.crt root@49.236.136.94:/root
+
+mkdir -p /etc/docker/certs.d
+mkdir -p /etc/docker/certs.d/devops-reg.ncp.sicc.co.kr
+cp /certs/devops-reg.ncp.sicc.co.kr.crt /etc/docker/certs.d/devops-reg.ncp.sicc.co.kr/ca.crt
+cp ~/devops-reg.ncp.sicc.co.kr.crt /etc/docker/certs.d/devops-reg.ncp.sicc.co.kr/ca.crt
+docker cp /etc/docker/certs.d/devops-reg.ncp.sicc.co.kr/ca.crt 
+
+htpasswd
