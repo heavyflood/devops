@@ -1,0 +1,9 @@
+FROM openjdk:8-jdk-alpine
+FROM sonarqube
+VOLUME /tmp
+ARG SERVER_ENV=dev
+ENV SERVER_ENV ${SERVER_ENV}
+ADD sonar-l10n-zh-plugin-1.21.jar /opt/sonarqube/extensions/plugins/
+ENV JAVA_OPTS="-XX:PermSize=1024m -XX:MaxPermSize=512m -Xmx4g -Xms2g"
+COPY ./app.jar app.jar
+ENTRYPOINT ["java", "-Dspring.profiles.active=${SERVER_ENV}", "-jar","/app.jar"] 
