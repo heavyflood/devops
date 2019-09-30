@@ -801,180 +801,179 @@
 ## docker-compose.yml
 
     version: '2'
-    
     services:
     
-    gitlab:
-    
-    privileged: true
-    
-    restart: always
-    
-    image: gitlab/gitlab-ce:latest
-    
-    container_name: gitlab
-    
-    environment:
-    
-    GITLAB_OMNIBUS_CONFIG: |
-    
-    external_url 'http://106.10.38.30:10080'
-    
-    depends_on:
-    
-    - postgresql
-    
-    ports:
-    
-    - "10080:10080"
-    
-    - "10022:22"
-    
-    volumes:
-    
-    - /srv/docker/gitlab/gitlab:/home/git/data:Z
-    
-    jenkins:
-    
-    privileged: true
-    
-    restart: always
-    
-    image: jenkins/jenkins:lts
-    
-    container_name: jenkins
-    
-    user: root
-    
-    environment:
-    
-    JENKINS_HOST_HOME: "/data/jenkins"
-    
-    ports:
-    
-    - 8090:8080
-    
-    volumes:
-    
-    - "/data/jenkins:/var/jenkins_home"
-    
-    - "/var/run/docker.sock:/var/run/docker.sock"
-    
-    - "/usr/bin/docker:/usr/bin/docker"
-    
-    postgresql:
-    
-    privileged: true
-    
-    restart: always
-    
-    container_name: postgres
-    
-    image: postgres:latest
-    
-    ports:
-    
-    - 5432:5432
-    
-    volumes:
-    
-    - "/srv/docker/gitlab/postgresql:/var/lib/postgresql:Z"
-    
-    environment:
-    
-    - POSTGRES_USER=postgres
-    
-    - POSTGRES_PASSWORD=0811
-    
-    redmine:
-    
-    privileged: true
-    
-    image: redmine
-    
-    container_name: redmine
-    
-    restart: always
-    
-    ports:
-    
-    - 3000:3000
-    
-    environment:
-    
-    - DB_ADAPTER=postgresql
-    
-    - DB_HOST=106.10.38.30
-    
-    - DB_PORT=5432
-    
-    - DB_USER=postgres
-    
-    - DB_PASS=0811
-    
-    - DB_NAME=redmine
-    
-    registry:
-    
-    privileged: true
-    
-    restart: always
-    
-    image: registry:latest
-    
-    container_name: registry
-    
-    ports:
-    
-    - 5000:5000
-    
-    volumes:
-    
-    - "/srv/docker/registry:/var/lib/registry"
-    
-    sonarqube:
-    
-    image: sonarqube
-    
-    ports:
-    
-    - "9000:9000"
-    
-    networks:
-    
-    - sonarnet
-    
-    environment:
-    
-    - sonar.jdbc.url=jdbc:postgresql://db:5432/sonar
-    
-    volumes:
-    
-    - sonarqube_conf:/opt/sonarqube/conf
-    
-    - sonarqube_data:/opt/sonarqube/data
-    
-    - sonarqube_extensions:/opt/sonarqube/extensions
-    
-    db:
-    
-    image: postgres
-    
-    networks:
-    
-    - sonarnet
-    
-    environment:
-    
-    - POSTGRES_USER=sonar
-    
-    - POSTGRES_PASSWORD=sonar
-    
-    volumes:
-    
-    - postgresql:/var/lib/postgresql
-    
-    - postgresql_data:/var/lib/postgresql/data
+	    gitlab:
+    
+		    privileged: true
+		    
+		    restart: always
+		    
+		    image: gitlab/gitlab-ce:latest
+		    
+		    container_name: gitlab
+		    
+		    environment:
+		    
+		    GITLAB_OMNIBUS_CONFIG: |
+		    
+		    external_url 'http://106.10.38.30:10080'
+		    
+		    depends_on:
+		    
+		    - postgresql
+		    
+		    ports:
+		    
+		    - "10080:10080"
+		    
+		    - "10022:22"
+		    
+		    volumes:
+		    
+		    - /srv/docker/gitlab/gitlab:/home/git/data:Z
+    
+	    jenkins:
+    
+		    privileged: true
+		    
+		    restart: always
+		    
+		    image: jenkins/jenkins:lts
+		    
+		    container_name: jenkins
+		    
+		    user: root
+		    
+		    environment:
+		    
+		    JENKINS_HOST_HOME: "/data/jenkins"
+		    
+		    ports:
+		    
+		    - 8090:8080
+		    
+		    volumes:
+		    
+		    - "/data/jenkins:/var/jenkins_home"
+		    
+		    - "/var/run/docker.sock:/var/run/docker.sock"
+		    
+		    - "/usr/bin/docker:/usr/bin/docker"
+		    
+		    postgresql:
+		    
+		    privileged: true
+		    
+		    restart: always
+		    
+		    container_name: postgres
+		    
+		    image: postgres:latest
+		    
+		    ports:
+		    
+		    - 5432:5432
+		    
+		    volumes:
+		    
+		    - "/srv/docker/gitlab/postgresql:/var/lib/postgresql:Z"
+		    
+		    environment:
+		    
+		    - POSTGRES_USER=postgres
+		    
+		    - POSTGRES_PASSWORD=0811
+    
+	    redmine:
+    
+		    privileged: true
+		    
+		    image: redmine
+		    
+		    container_name: redmine
+		    
+		    restart: always
+		    
+		    ports:
+		    
+		    - 3000:3000
+		    
+		    environment:
+		    
+		    - DB_ADAPTER=postgresql
+		    
+		    - DB_HOST=106.10.38.30
+		    
+		    - DB_PORT=5432
+		    
+		    - DB_USER=postgres
+		    
+		    - DB_PASS=0811
+		    
+		    - DB_NAME=redmine
+    
+	    registry:
+    
+		    privileged: true
+		    
+		    restart: always
+		    
+		    image: registry:latest
+		    
+		    container_name: registry
+		    
+		    ports:
+		    
+		    - 5000:5000
+		    
+		    volumes:
+		    
+		    - "/srv/docker/registry:/var/lib/registry"
+    
+	    sonarqube:
+    
+		    image: sonarqube
+		    
+		    ports:
+		    
+		    - "9000:9000"
+		    
+		    networks:
+		    
+		    - sonarnet
+		    
+		    environment:
+		    
+		    - sonar.jdbc.url=jdbc:postgresql://db:5432/sonar
+		    
+		    volumes:
+		    
+		    - sonarqube_conf:/opt/sonarqube/conf
+		    
+		    - sonarqube_data:/opt/sonarqube/data
+		    
+		    - sonarqube_extensions:/opt/sonarqube/extensions
+		    
+		    db:
+		    
+		    image: postgres
+		    
+		    networks:
+		    
+		    - sonarnet
+		    
+		    environment:
+		    
+		    - POSTGRES_USER=sonar
+		    
+		    - POSTGRES_PASSWORD=sonar
+		    
+		    volumes:
+		    
+		    - postgresql:/var/lib/postgresql
+		    
+		    - postgresql_data:/var/lib/postgresql/data
     
     networks:
     
@@ -1121,5 +1120,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3MTAwMzg1OTFdfQ==
+eyJoaXN0b3J5IjpbMTMzODkwMzYzOV19
 -->
