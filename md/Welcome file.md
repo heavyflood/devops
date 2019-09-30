@@ -1381,26 +1381,70 @@
 
 # registry repository name
 
-http://host:port/v2/_catalog
+    http://host:port/v2/_catalog
 
 # registry tag list
 
-http://host:port/v2/app/tags/list
+    http://host:port/v2/app/tags/list
 
 
 # 실습 프로젝트 URL
 
-URL : https://github.com/devops-sicc/edusicc-step1.git
+    URL : https://github.com/devops-sicc/edusicc-step1.git
+    
+    ID : devops-sicc
+    
+    PW : jiwan8985@@
+    
+    E-MAIL : jiwan8985@sicc.co.kr
 
-ID : devops-sicc
+## Ingrss 생성 guide
 
-PW : jiwan8985@@
-
-E-MAIL : jiwan8985@sicc.co.kr
-
-## Export a file
-
-You can export the current file by clicking **Export to disk** in the menu. You can choose to export the file as plain Markdown, as HTML using a Handlebars template or as a PDF.
+    apiVersion: extensions/v1beta1
+    
+    kind: Ingress
+    
+    metadata:
+    
+	    name: test-ingress
+	    
+	    annotations:
+    
+		    kubernetes.io/ingress.class: nginx
+		    
+		    ingress.kubernetes.io/rewrite-target: /
+    
+    spec:
+    
+	    rules:
+    
+	    - host: devops-kibana.ncp.sicc.co.kr
+    
+		    http:
+    
+    paths:
+    
+    - path: /
+    
+    backend:
+    
+    serviceName: elk-kibana
+    
+    servicePort: 'http'
+    
+    - host: devops-es.ncp.sicc.co.kr
+    
+    http:
+    
+    paths:
+    
+    - path: /
+    
+    backend:
+    
+    serviceName: elk-elasticsearch-client
+    
+    servicePort: 'http'
 
 
 # Synchronization
@@ -1517,5 +1561,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3ODQxMDkxNjldfQ==
+eyJoaXN0b3J5IjpbMjQ4NjM0NjE0XX0=
 -->
