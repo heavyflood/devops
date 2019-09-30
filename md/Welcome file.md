@@ -21,181 +21,178 @@
 
 # Sonaqube buile.grade
 
-buildscript {
-
-repositories {
-
-mavenCentral()
-
-}
-
-dependencies {
-
-classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.5.21.RELEASE'
-
-classpath 'se.transmode.gradle:gradle-docker:1.2'
-
-classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
-
-classpath 'org.ajoberstar:gradle-jacoco:0.1.0'
-
-}
-
-}
-
-plugins {
-
-id 'java'
-
-id "org.sonarqube" version "2.5"
-
-}
-
-apply plugin: 'docker'
-
-apply plugin: 'org.springframework.boot'
-
-apply plugin: "org.sonarqube"
-
-apply plugin: 'jacoco'
-
-jacoco {
-
-toolVersion = "0.7.5.201505241946"
-
-}
-
-test {
-
-jacoco {
-
-enabled = true
-
-destinationFile = file("${buildDir}/jacoco/jacoco.exec") // 기본은 ${buildDir}/jacoco/test.exec
-
-}
-
-ignoreFailures = true
-
-}
-
-jacocoTestReport {
-
-reports {
-
-xml.enabled false
-
-csv.enabled false
-
-html.destination file("${buildDir}/jacocoHtml")
-
-}
-
-jacocoClasspath = files
-
-('../lib/org.jacoco.core-0.7.9.jar',
-
-'../lib/org.jacoco.report-0.7.9.jar',
-
-'../lib/org.jacoco.ant-0.7.9.jar',
-
-'../lib/asm-all-5.2.jar'
-
-)
-
-}
-
-group = 'com.sicc'
-
-version = '0.0.2-SNAPSHOT'
-
-sourceCompatibility = '1.8'
-
-repositories {
-
-mavenCentral()
-
-}
-
-dependencies {
-
-compile 'org.springframework.boot:spring-boot-starter-web'
-
-providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-
-testCompile 'org.springframework.boot:spring-boot-starter-test'
-
-}
-
-jar {
-
-baseName = "SiccDocker"
-
-version = "${version}"
-
-from {
-
-configurations.compile.collect {
-
-it.isDirectory()?it:zipTree(it)
-
-}
-
-}
-
-}
-
-task buildDocker(type: Docker, dependsOn: build) {
-
-applicationName = jar.baseName
-
-dockerfile = file('src/main/docker/Dockerfile')
-
-doFirst {
-
-copy {
-
-from jar
-
-into stageDir
-
-}
-
-}
-
-}
-
-sonarqube {
-
-properties {
-
-property "sonar.projectName", "SiccDocker"
-
-property "sonar.projectKey", "SiccDocker"
-
-property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
-
-property "sonar.host.url", "http://106.10.38.30:9000"
-
-property "sonar.sources", "src/main/java"
-
-property "sonar.language", "java"
-
-property "sonar.sourceEncoding", "UTF-8"
-
-property "sonar.tests", "src/test/java"
-
-property "sonar.java.binaries", "bin"
-
-property "sonar.java.libraries", "../lib/**/*.jar"
-
-property "sonar.java.test.libraries", "../lib/**/*.jar"
-
-property "sonar.jacoco.reportPaths", "build/jacoco/test.exec"
-
-}
-
-}
+    buildscript {
+    	repositories {
+    		mavenCentral()
+    	}
+    
+    dependencies {
+    
+	    classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.5.21.RELEASE'
+	   
+	    classpath 'se.transmode.gradle:gradle-docker:1.2'
+	    
+	    classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
+	    
+	    classpath 'org.ajoberstar:gradle-jacoco:0.1.0'
+    
+    }
+    
+    }
+    
+    plugins {
+    
+    id 'java'
+    
+    id "org.sonarqube" version "2.5"
+    
+    }
+    
+    apply plugin: 'docker'
+    
+    apply plugin: 'org.springframework.boot'
+    
+    apply plugin: "org.sonarqube"
+    
+    apply plugin: 'jacoco'
+    
+    jacoco {
+    
+    toolVersion = "0.7.5.201505241946"
+    
+    }
+    
+    test {
+    
+    jacoco {
+    
+    enabled = true
+    
+    destinationFile = file("${buildDir}/jacoco/jacoco.exec") // 기본은 ${buildDir}/jacoco/test.exec
+    
+    }
+    
+    ignoreFailures = true
+    
+    }
+    
+    jacocoTestReport {
+    
+    reports {
+    
+    xml.enabled false
+    
+    csv.enabled false
+    
+    html.destination file("${buildDir}/jacocoHtml")
+    
+    }
+    
+    jacocoClasspath = files
+    
+    ('../lib/org.jacoco.core-0.7.9.jar',
+    
+    '../lib/org.jacoco.report-0.7.9.jar',
+    
+    '../lib/org.jacoco.ant-0.7.9.jar',
+    
+    '../lib/asm-all-5.2.jar'
+    
+    )
+    
+    }
+    
+    group = 'com.sicc'
+    
+    version = '0.0.2-SNAPSHOT'
+    
+    sourceCompatibility = '1.8'
+    
+    repositories {
+    
+    mavenCentral()
+    
+    }
+    
+    dependencies {
+    
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    
+    }
+    
+    jar {
+    
+    baseName = "SiccDocker"
+    
+    version = "${version}"
+    
+    from {
+    
+    configurations.compile.collect {
+    
+    it.isDirectory()?it:zipTree(it)
+    
+    }
+    
+    }
+    
+    }
+    
+    task buildDocker(type: Docker, dependsOn: build) {
+    
+    applicationName = jar.baseName
+    
+    dockerfile = file('src/main/docker/Dockerfile')
+    
+    doFirst {
+    
+    copy {
+    
+    from jar
+    
+    into stageDir
+    
+    }
+    
+    }
+    
+    }
+    
+    sonarqube {
+    
+    properties {
+    
+    property "sonar.projectName", "SiccDocker"
+    
+    property "sonar.projectKey", "SiccDocker"
+    
+    property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
+    
+    property "sonar.host.url", "http://106.10.38.30:9000"
+    
+    property "sonar.sources", "src/main/java"
+    
+    property "sonar.language", "java"
+    
+    property "sonar.sourceEncoding", "UTF-8"
+    
+    property "sonar.tests", "src/test/java"
+    
+    property "sonar.java.binaries", "bin"
+    
+    property "sonar.java.libraries", "../lib/**/*.jar"
+    
+    property "sonar.java.test.libraries", "../lib/**/*.jar"
+    
+    property "sonar.jacoco.reportPaths", "build/jacoco/test.exec"
+    
+    }
+    
+    }
 
 ## Create files and folders
 
@@ -332,5 +329,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5MDA0Njg0NzBdfQ==
+eyJoaXN0b3J5IjpbLTc4MTE1OTkwMl19
 -->
