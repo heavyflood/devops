@@ -1422,44 +1422,98 @@
     
 		    http:
     
-    paths:
+			    paths:
     
-    - path: /
+			    - path: /
     
-    backend:
+			    backend:
     
-    serviceName: elk-kibana
+				    serviceName: elk-kibana
     
-    servicePort: 'http'
-    
-    - host: devops-es.ncp.sicc.co.kr
-    
-    http:
-    
-    paths:
-    
-    - path: /
-    
-    backend:
-    
-    serviceName: elk-elasticsearch-client
-    
-    servicePort: 'http'
+				    servicePort: 'http'
 
 
-# Synchronization
+# kubernetes-master-slave 생성 가이드
 
-Synchronization is one of the biggest features of StackEdit. It enables you to synchronize any file in your workspace with other files stored in your **Google Drive**, your **Dropbox** and your **GitHub** accounts. This allows you to keep writing on other devices, collaborate with people you share the file with, integrate easily into your workflow... The synchronization mechanism takes place every minute in the background, downloading, merging, and uploading file modifications.
+    0. Pre-Install
+    
+    yum update && upgrade
+    
+    yum search openjdk
+    
+    yum install java-1.8.0-openjdk.x86_64
+    
+    1. Docker-Install
+    
+    yum install -y yum-utils device-mapper-persistent-data lvm2
+    
+    yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    
+    yum -y install docker-ce
+    
+    systemctl enable docker.service
+    
+    systemctl start docker.service
+    
+    systemctl status docker.service
+    
+    2. Docker-Compose Install
+    
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    
+    sudo chmod +x /usr/local/bin/docker-compose
+    
+    3. Kubernetes Install
+    
+    cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+    
+    [kubernetes]
+    
+    name=Kubernetes
+    
+    baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    
+    enabled=1
+    
+    gpgcheck=1
+    
+    repo_gpgcheck=1
+    
+    gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    
+    EOF
+    
+    yum install -y kubectl
+    
+    4. Helm Install
+    
+    wget https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz
+    
+    tar zxvf helm-v2.13.1-linux-amd64.tar.gz
+    
+    sudo mv linux-amd64/helm /usr/local/bin/helm
+    
+    helm init : Tiller Install
+    
+    5. Skaffold Install
+    
+    curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-darwin-amd64
+    
+    chmod +x skaffold
+    
+    sudo mv skaffold /usr/local/bin
+    
+    vim /etc/hosts
+    
+    127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4
+    
+    ::1 localhost localhost.localdomain localhost6 localhost6.localdomain6
+    
+    10.41.172.151 devops-jw
+    
+    10.41.178.164 devops-test
 
-There are two types of synchronization and they can complement each other:
-
-- The workspace synchronization will sync all your files, folders and settings automatically. This will allow you to fetch your workspace on any other device.
-	> To start syncing your workspace, just sign in with Google in the menu.
-
-- The file synchronization will keep one file of the workspace synced with one or multiple files in **Google Drive**, **Dropbox** or **GitHub**.
-	> Before starting to sync files, you must link an account in the **Synchronize** sub-menu.
-
-## Open a file
+## Kubernetes-
 
 You can open a file from **Google Drive**, **Dropbox** or **GitHub** by opening the **Synchronize** sub-menu and clicking **Open from**. Once opened in the workspace, any modification in the file will be automatically synced.
 
@@ -1561,5 +1615,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjQ4NjM0NjE0XX0=
+eyJoaXN0b3J5IjpbLTE3NzE5MjQyMzFdfQ==
 -->
