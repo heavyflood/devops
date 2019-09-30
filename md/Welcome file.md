@@ -993,11 +993,71 @@
     
     postgresql_data:
 
-## Rename a file
+# Removing All Unused Objects :
 
-You can rename the current file by clicking the file name in the navigation bar or by clicking the **Rename** button in the file explorer.
+    $ docker system prune
+    
+    $ docker system prune --volumes
 
-## Delete a file
+# Removing Docker Containers:
+
+    $ docker container ls -a
+    
+    $ docker container rm [container name]
+
+# Remove all stopped containers:
+
+    $ docker container ls -a --filter status=exited --filter status=created
+    
+    $ docker container prune
+    
+    $ docker container prune --filter "until=12h"
+    
+    $ docker container stop $(docker container ls -aq)
+    
+    $ docker container rm $(docker container ls -aq)
+
+# Removing Docker Images :
+
+    $ docker image ls
+    
+    $ docker image rm [image name]
+    
+    $ docker rmi $(docker images -f dangling=true -q)
+    
+    $ docker image prune
+    
+    $ docker image prune -a
+    
+    $ docker image prune -a --filter "until=12h"
+
+# Removing Docker Volumes :
+
+    $ docker volume ls
+    
+    $ docker volume rm [volume name]
+    
+    $ docker volume prune
+
+# Removing Docker Networks :
+
+    $ docker network ls
+    
+    $ docker network rm [volume name]
+    
+    $ docker network prune
+    
+    $ docker network prune -a --filter "until=12h"
+
+# Docker repository
+
+    $ docker tag image username/repository:tagname
+    
+    $ docker push username/repository:tagname
+    
+    $ docker pull username/repository:tagname
+
+## 1차 tk
 
 You can delete the current file by clicking the **Remove** button in the file explorer. The file will be moved into the **Trash** folder and automatically deleted after 7 days of inactivity.
 
@@ -1120,5 +1180,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTMzODkwMzYzOV19
+eyJoaXN0b3J5IjpbLTcwMTQwNTM5M119
 -->
