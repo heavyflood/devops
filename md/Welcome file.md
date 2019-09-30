@@ -194,9 +194,609 @@
     
     }
 
-## Create files and folders
+## jenkinsfile
 
-The file explorer is accessible using the button in left corner of the navigation bar. You can create a new file by clicking the **New file** button in the file explorer. You can also create folders by clicking the **New folder** button.
+    // Jenkins file for Gradle.build
+    
+    node {
+    
+    def jarFile = ''
+    
+    // >>>>> checkout >>>>>>
+    
+    stage('checkout') {
+    
+    checkout(
+    
+    [
+    
+    $class: 'GitSCM',
+    
+    additionalCredentials: [],
+    
+    excludedCommitMessage: '',
+    
+    excludedRegions: '',
+    
+    excludedRevprop: '',
+    
+    excludedUsers: '',
+    
+    filterChangelog: false,
+    
+    ignoreDirPropChanges: false,
+    
+    includedRegions: '',
+    
+    branches: [[name: '*/master']],
+    
+    doGenerateSubmoduleConfigurations: false,
+    
+    extensions: [],
+    
+    submoduleCfg: [],
+    
+    userRemoteConfigs: [[credentialsId: '인증키', url: 'git-repo']]
+    
+    ]
+    
+    )
+    
+    }
+    
+    // >>>>> SonaQube >>>>>
+    
+    // sonaqube -> marketplcae -> install sonaqube:java
+    
+    // gradle.build -> update
+    
+    // jenkins/sonaqube /bash/ conf/sonaqube-sacnner.property update -> run
+    
+    stage('SonarQube Analysis') {
+    
+    withSonarQubeEnv('Sonarqube-4.0') {
+    
+    // sh "chmod +x ./gradlew"
+    
+    // sh "./gradlew -Pprod clean test sonarqube"
+    
+    sh "${scannerHome}/bin/sonar-scanner"
+    
+    }
+    
+    timeout(time: 10, unit: 'MINUTES') {
+    
+    waitForQualityGate abortPipeline: false
+    
+    }
+    
+    }
+    
+    // >>>>> JUNIT TEST >>>>>
+    
+    stage('unit-test') {
+    
+    sh "chmod +x ./gradlew"
+    
+    sh "./gradlew clean test --info"
+    
+    }
+    
+    // >>>>> gradle init >>>>>
+    
+    stage('initialize') {
+    
+    sh "chmod +x ./gradlew"
+    
+    appName = sh(script: "./gradlew properties -q | grep \"name\" | awk '{print\$2}'", returnStdout: true).trim()
+    
+    groupName = sh(script: "./gradlew properties -q | grep \"group\" | awk '{print\$2}'", returnStdout: true).trim()
+    
+    appVersion = sh(script: "./gradlew properties -q | grep \"version\" | awk '{print\$2}'", returnStdout: true).trim()
+    
+    jarFile = appName + '-' + appVersion + '.jar'
+    
+    echo jarFile
+    
+    }
+    
+    // >>>>> gredle build >>>>>
+    
+    stage('build') {
+    
+    sh "./gradlew build"
+    
+    }
+    
+    // >>>>> gradle archieve & docker build >>>>>
+    
+    stage('archieve') {
+    
+    parallel(
+    
+    "Archive Artifacts" : {
+    
+    archiveArtifacts artifacts: '**/build/libs/' + appName + '-' + appVersion + '.jar',
+    
+    fingerprint: true
+    
+    },
+    
+    "Docker ImagePush": {
+    
+    sh 'mv build/libs/' + jarFile + ' ./app.jar'
+    
+    sh 'docker container ls -a -f name=app -q | xargs -r docker container stop'
+    
+    sh 'docker container ls -a -f name=app -q | xargs -r docker container rm'
+    
+    sh 'docker rmi -f devops-reg.ncp.sicc.co.kr/app'
+    
+    sh 'docker image build -t app --no-cache .'
+    
+    sh 'docker tag app devops-reg.ncp.sicc.co.kr/app:release '
+    
+    sh 'docker push devops-reg.ncp.sicc.co.kr/app:release'
+    
+    sh 'docker run --name=app -d devops-reg.ncp.sicc.co.kr/app:release .'
+    
+    }
+    
+    )
+    
+    }
+    
+    }
+    
+    // Jenkinsfile for POM.xml
+    
+    // Install [Pipeline: Stage step] on Jenkins
+    
+    // Set Maven Setting On Jenkins (Maven) for Use Pipeline: Stage step
+    
+    node {
+    
+    def jarFile = ''
+    
+    def mvnHome = tool 'M3'
+    
+    // >>>>> checkout >>>>>
+    
+    stage('checkout') {
+    
+    checkout(
+    
+    [
+    
+    $class: 'GitSCM',
+    
+    additionalCredentials: [],
+    
+    excludedCommitMessage: '',
+    
+    excludedRegions: '',
+    
+    excludedRevprop: '',
+    
+    excludedUsers: '',
+    
+    filterChangelog: false,
+    
+    ignoreDirPropChanges: false,
+    
+    includedRegions: '',
+    
+    branches: [[name: '*/master']],
+    
+    doGenerateSubmoduleConfigurations: false,
+    
+    extensions: [],
+    
+    submoduleCfg: [],
+    
+    userRemoteConfigs: [[credentialsId: '인증키', url: 'git-repo']]
+    
+    ]
+    
+    )
+    
+    }
+    
+    // >>>>> Maven Install && JunitTest >>>>>
+    
+    stage('unit-test') {
+    
+    script {
+    
+    sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
+    
+    sh "'${mvnHome}/bin/mvn' -Dintegration-tests.skip=true -Dmaven.test.skip=true -Ddeploy-path=./deploy clean install"
+    
+    // def pom = readMavenPom file: 'pom.xml'
+    
+    // get information of pom
+    
+    // developmentArtifactVersion = "${pom.artifactId}-${pom.version}"
+    
+    // print pom.version
+    
+    // print pom.artifactId
+    
+    // print pom.name
+    
+    // print pom.groupId
+    
+    // print pom.description
+    
+    // execute the unit testing and collect the reports
+    
+    // archiveArtifacts 'target*//*.jar'
+    
+    }
+    
+    }
+    
+    // >>>>> Archive && Docker Build >>>>>
+    
+    stage('archieve') {
+    
+    def pom = readMavenPom file: 'pom.xml'
+    
+    parallel(
+    
+    "Archive Artifacts" : {
+    
+    jarFile = "${pom.artifactId}-${pom.version}.jar"
+    
+    archiveArtifacts artifacts: 'target/' + jarFile, fingerprint: true
+    
+    },
+    
+    "Docker ImagePush": {
+    
+    sh 'mv target/' + jarFile +' ./mvn2.jar'
+    
+    sh 'docker image build -t mvn2 .'
+    
+    sh 'docker tag mvn2 localhost:5000/mvn2:mvn2-1 '
+    
+    sh 'docker push localhost:5000/mvn2:mvn2-1'
+    
+    // sh 'docker run -d -p 8888:9999 app .'
+    
+    }
+    
+    )
+    
+    }
+    
+    }
+    
+    // Jenkinsfile for POM.xml
+    
+    // Install Kubernetes On Jenkins
+    
+    // apt-get update
+    
+    // apt-get install gettext-base
+    
+    node {
+    
+    def jarFile = ''
+    
+    def script = "; envsubst < deployment.yaml > deployment.yaml"
+    
+    stage('checkout') {
+    
+    checkout(
+    
+    [
+    
+    $class: 'GitSCM',
+    
+    additionalCredentials: [],
+    
+    excludedCommitMessage: '',
+    
+    excludedRegions: '',
+    
+    excludedRevprop: '',
+    
+    excludedUsers: '',
+    
+    filterChangelog: false,
+    
+    ignoreDirPropChanges: false,
+    
+    includedRegions: '',
+    
+    branches: [[name: '*/master']],
+    
+    doGenerateSubmoduleConfigurations: false,
+    
+    extensions: [],
+    
+    submoduleCfg: [],
+    
+    userRemoteConfigs: [[credentialsId: '인증키', url: 'repo']]
+    
+    ]
+    
+    )
+    
+    }
+    
+    stage('unit-test') {
+    
+    sh "chmod +x ./gradlew"
+    
+    sh "./gradlew clean test --info"
+    
+    }
+    
+    stage('initialize') {
+    
+    sh "chmod +x ./gradlew"
+    
+    appName = sh(script: "./gradlew properties -q | grep \"name\" | awk '{print\$2}'", returnStdout: true).trim()
+    
+    groupName = sh(script: "./gradlew properties -q | grep \"group\" | awk '{print\$2}'", returnStdout: true).trim()
+    
+    appVersion = sh(script: "./gradlew properties -q | grep \"version\" | awk '{print\$2}'", returnStdout: true).trim()
+    
+    jarFile = appName + '-' + appVersion + '.jar'
+    
+    }
+    
+    stage('build') {
+    
+    sh "./gradlew build"
+    
+    }
+    
+    stage('archieve & docker build') {
+    
+    parallel(
+    
+    "Archive Artifacts" : {
+    
+    archiveArtifacts artifacts: '**/build/libs/' + appName + '-' + appVersion + '.jar'
+    
+    },
+    
+    "Docker ImagePush": {
+    
+    sh 'mv build/libs/' + jarFile + ' ./app.jar'
+    
+    sh 'docker container ls -a -f name=app -q | xargs -r docker container stop'
+    
+    sh 'docker container ls -a -f name=app -q | xargs -r docker container rm'
+    
+    sh 'docker rmi -f devops-reg.ncp.sicc.co.kr/app'
+    
+    sh 'docker image build -t app --no-cache . '
+    
+    sh 'docker image tag app devops-reg.ncp.sicc.co.kr/app '
+    
+    sh 'docker image push devops-reg.ncp.sicc.co.kr/app'
+    
+    sh 'docker run --name=app -d -p 9091:9091 devops-reg.ncp.sicc.co.kr/app .'
+    
+    }
+    
+    )
+    
+    }
+    
+    stage('kube') {
+    
+    sh 'kubectl apply --record -f gs-spring-boot-docker-deployment.yaml'
+    
+    sh 'kubectl get deployments'
+    
+    sh 'kubectl get rs'
+    
+    sh 'kubectl get po'
+    
+    sh 'kubectl apply -f gs-spring-boot-docker-service.yaml'
+    
+    sh 'kubectl get service'
+    
+    sh 'kubectl get svc'
+    
+    sh 'kubectl set image deployment/gs-spring-boot-docker-deployment gs-spring-boot-docker=dtlabs/gs-spring-boot-docker:2.0 --record'
+    
+    sh 'kubectl rollout history deployment/gs-spring-boot-docker-deployment'
+    
+    sh 'kubectl rollout history deployment/gs-spring-boot-docker-deployment --revision=2'
+    
+    sh 'kubectl rollout undo deployment/gs-spring-boot-docker-deployment'
+    
+    sh 'kubectl rollout undo deployment/gs-spring-boot-docker-deployment --to-revision=2'
+    
+    }
+    
+    }
+    
+    // jenkins android
+    
+    node {
+    
+    def jarFile = ''
+    
+    //def script = "; envsubst < deployment.yaml > deployment.yaml"
+    
+    stage('checkout') {
+    
+    checkout(
+    
+    [
+    
+    $class: 'GitSCM',
+    
+    additionalCredentials: [],
+    
+    excludedCommitMessage: '',
+    
+    excludedRegions: '',
+    
+    excludedRevprop: '',
+    
+    excludedUsers: '',
+    
+    filterChangelog: false,
+    
+    ignoreDirPropChanges: false,
+    
+    includedRegions: '',
+    
+    branches: [[name: '*/master']],
+    
+    doGenerateSubmoduleConfigurations: false,
+    
+    extensions: [],
+    
+    submoduleCfg: [],
+    
+    userRemoteConfigs: [[credentialsId: 'da5d721f-6590-4f89-ba34-4704d29b01df', url: 'http://49.236.136.94:10080/devops/demo.git']]
+    
+    ]
+    
+    )
+    
+    }
+    
+    stage('unit-test') {
+    
+    sh "chmod +x ./gradlew"
+    
+    sh "./gradlew clean test --info"
+    
+    }
+    
+    stage('initialize') {
+    
+    sh "chmod +x ./gradlew"
+    
+    appName = sh(script: "./gradlew properties -q | grep \"name\" | awk '{print\$2}'", returnStdout: true).trim()
+    
+    groupName = sh(script: "./gradlew properties -q | grep \"group\" | awk '{print\$2}'", returnStdout: true).trim()
+    
+    appVersion = sh(script: "./gradlew properties -q | grep \"version\" | awk '{print\$2}'", returnStdout: true).trim()
+    
+    jarFile = appName + '-' + appVersion + '.jar'
+    
+    }
+    
+    stage('build') {
+    
+    sh "./gradlew build"
+    
+    }
+    
+    stage('archieve & docker build') {
+    
+    parallel(
+    
+    "Archive Artifacts" : {
+    
+    archiveArtifacts artifacts: '**/build/libs/' + appName + '-' + appVersion + '.jar'
+    
+    },
+    
+    "Docker ImagePush": {
+    
+    sh 'mv build/libs/' + jarFile + ' ./app.jar'
+    
+    sh 'docker container ls -a -f name=app -q | xargs -r docker container stop'
+    
+    sh 'docker container ls -a -f name=app -q | xargs -r docker container rm'
+    
+    // sh 'docker rmi -f devops-reg.ncp.sicc.co.kr/app'
+    
+    sh 'docker image build -t app --no-cache . '
+    
+    sh 'docker login -u pp22shj -p shjk6063'
+    
+    sh 'docker image tag app pp22shj/registry:app '
+    
+    sh 'docker image push pp22shj/registry:app'
+    
+    def script = "; envsubst < kubernetes.yaml > deployment.yaml"
+    
+    sh 'export APP_NAME=app IMAGE=pp22shj/registry:app ' + script
+    
+    // sh 'kubectl create namespace test'
+    
+    sh 'kubectl apply -f deployment.yaml --namespace test '
+    
+    // sh 'docker run --name=app -d -p 9091:9091 devops-reg.ncp.sicc.co.kr/app .'
+    
+    }
+    
+    )
+    
+    }
+    
+    // stage('kube') {
+    
+    // def script = "; envsubst < kubernetes.yaml > deployment.yaml"
+    
+    // sh 'export APP_NAME=app IMAGE=registry/app ' + script
+    
+    // sh 'kubectl apply -f deployment.yaml --namespace jiwan '
+    
+    // // sh 'kubectl get service --namespace jiwan'
+    
+    // // sh 'kubectl get svc --namespace jiwan'
+    
+    // // sh 'kubectl get deployments --namespace jiwan'
+    
+    // // sh 'kubectl get rs --namespace jiwan'
+    
+    // // sh 'kubectl get po --namespace jiwan'
+    
+    // // sh 'kubectl set image deployment/gs-spring-boot-docker-deployment gs-spring-boot-docker=dtlabs/gs-spring-boot-docker:2.0 --record'
+    
+    // // sh 'kubectl rollout history deployment/gs-spring-boot-docker-deployment'
+    
+    // // sh 'kubectl rollout history deployment/gs-spring-boot-docker-deployment --revision=2'
+    
+    // // sh 'kubectl rollout undo deployment/gs-spring-boot-docker-deployment'
+    
+    // // sh 'kubectl rollout undo deployment/gs-spring-boot-docker-deployment --to-revision=2'
+    
+    // }
+    
+    // stage('kube') {
+    
+    // sh 'kubectl apply --record -f gs-spring-boot-docker-deployment.yaml'
+    
+    // sh 'kubectl get deployments'
+    
+    // sh 'kubectl get rs'
+    
+    // sh 'kubectl get po'
+    
+    // sh 'kubectl apply -f gs-spring-boot-docker-service.yaml'
+    
+    // sh 'kubectl get service'
+    
+    // sh 'kubectl get svc'
+    
+    // sh 'kubectl set image deployment/gs-spring-boot-docker-deployment gs-spring-boot-docker=dtlabs/gs-spring-boot-docker:2.0 --record'
+    
+    // sh 'kubectl rollout history deployment/gs-spring-boot-docker-deployment'
+    
+    // sh 'kubectl rollout history deployment/gs-spring-boot-docker-deployment --revision=2'
+    
+    // sh 'kubectl rollout undo deployment/gs-spring-boot-docker-deployment'
+    
+    // sh 'kubectl rollout undo deployment/gs-spring-boot-docker-deployment --to-revision=2'
+    
+    // }
+    
+    }
 
 ## Switch to another file
 
@@ -329,5 +929,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTc4MTE1OTkwMl19
+eyJoaXN0b3J5IjpbLTE3OTk0ODczOTNdfQ==
 -->
