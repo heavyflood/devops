@@ -229,7 +229,102 @@ node {
 }
 
 // jenkins android
+node {
+    def jarFile = ''
+    //def script = "; envsubst < deployment.yaml > deployment.yaml"
+    
+    stage('checkout') {
+        checkout(
+            [
+                $class: 'GitSCM',
+                additionalCredentials: [],
+                excludedCommitMessage: '',
+                excludedRegions: '',
+                excludedRevprop: '',
+                excludedUsers: '',
+                filterChangelog: false,
+                ignoreDirPropChanges: false,
+                includedRegions: '',
+                branches: [[name: '*/master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: 'da5d721f-6590-4f89-ba34-4704d29b01df', url: 'http://49.236.136.94:10080/devops/demo.git']]
+            ]
+        )
+    }
 
+    stage('unit-test') {
+        sh "chmod +x ./gradlew"
+        sh "./gradlew clean test --info"
+    }
+
+    stage('initialize') {
+        sh "chmod +x ./gradlew"
+        appName = sh(script: "./gradlew properties -q | grep \"name\" | awk '{print\$2}'", returnStdout: true).trim()
+        groupName = sh(script: "./gradlew properties -q | grep \"group\" | awk '{print\$2}'", returnStdout: true).trim()
+        appVersion = sh(script: "./gradlew properties -q | grep \"version\" | awk '{print\$2}'", returnStdout: true).trim()
+        jarFile = appName + '-' + appVersion + '.jar'
+    }
+
+    stage('build') {
+        sh "./gradlew build"
+    }
+
+    stage('archieve & docker build') {
+        parallel(
+            "Archive Artifacts" : {
+                archiveArtifacts artifacts: '**/build/libs/' + appName + '-' + appVersion + '.jar'
+            },
+            "Docker ImagePush": {
+                sh 'mv build/libs/' + jarFile + ' ./app.jar'
+                sh 'docker container ls -a -f name=app -q | xargs -r docker container stop'
+                sh 'docker container ls -a -f name=app -q | xargs -r docker container rm'
+                // sh 'docker rmi -f devops-reg.ncp.sicc.co.kr/app'
+                sh 'docker image build -t app --no-cache . '
+                sh 'docker login -u pp22shj -p shjk6063'
+                sh 'docker image tag app pp22shj/registry:app '
+                sh 'docker image push pp22shj/registry:app'
+                def script = "; envsubst < kubernetes.yaml > deployment.yaml"
+                sh 'export APP_NAME=app IMAGE=pp22shj/registry:app ' + script
+                // sh 'kubectl create namespace test'
+                sh 'kubectl apply -f deployment.yaml --namespace test '
+                // sh 'docker run --name=app -d -p 9091:9091 devops-reg.ncp.sicc.co.kr/app .'
+            }
+        )
+    }
+
+    // stage('kube') {
+    //     def script = "; envsubst < kubernetes.yaml > deployment.yaml"
+    //     sh 'export APP_NAME=app IMAGE=registry/app ' + script
+    //     sh 'kubectl apply -f deployment.yaml --namespace jiwan '
+    //     // sh 'kubectl get service --namespace jiwan'
+    //     // sh 'kubectl get svc --namespace jiwan'
+    //     // sh 'kubectl get deployments --namespace jiwan'
+    //     // sh 'kubectl get rs --namespace jiwan'
+    //     // sh 'kubectl get po --namespace jiwan'
+    //     // sh 'kubectl set image deployment/gs-spring-boot-docker-deployment gs-spring-boot-docker=dtlabs/gs-spring-boot-docker:2.0 --record'
+    //     // sh 'kubectl rollout history deployment/gs-spring-boot-docker-deployment'
+    //     // sh 'kubectl rollout history deployment/gs-spring-boot-docker-deployment --revision=2'
+    //     // sh 'kubectl rollout undo deployment/gs-spring-boot-docker-deployment'
+    //     // sh 'kubectl rollout undo deployment/gs-spring-boot-docker-deployment --to-revision=2'
+    // }
+    // stage('kube') {
+    //     sh 'kubectl apply --record -f gs-spring-boot-docker-deployment.yaml'
+    //     sh 'kubectl get deployments'
+    //     sh 'kubectl get rs'
+    //     sh 'kubectl get po'
+    //     sh 'kubectl apply -f gs-spring-boot-docker-service.yaml'
+    //     sh 'kubectl get service'
+    //     sh 'kubectl get svc'
+    //     sh 'kubectl set image deployment/gs-spring-boot-docker-deployment gs-spring-boot-docker=dtlabs/gs-spring-boot-docker:2.0 --record'
+    //     sh 'kubectl rollout history deployment/gs-spring-boot-docker-deployment'
+    //     sh 'kubectl rollout history deployment/gs-spring-boot-docker-deployment --revision=2'
+    //     sh 'kubectl rollout undo deployment/gs-spring-boot-docker-deployment'
+    //     sh 'kubectl rollout undo deployment/gs-spring-boot-docker-deployment --to-revision=2'
+        
+    // }
+}
 
 
 
