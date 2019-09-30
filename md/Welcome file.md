@@ -1433,7 +1433,7 @@
 				    servicePort: 'http'
 
 
-# kubernetes-master-slave 생성 가이드
+# kubernetes-master-slave 생성 가이드 1
 
     0. Pre-Install
     
@@ -1513,9 +1513,243 @@
     
     10.41.178.164 devops-test
 
-## Kubernetes-
+## Kubernetes-master-slave 생성 가이드 2
 
-You can open a file from **Google Drive**, **Dropbox** or **GitHub** by opening the **Synchronize** sub-menu and clicking **Open from**. Once opened in the workspace, any modification in the file will be automatically synced.
+    1. System update
+    
+    sudo yum update -y
+    
+    2. Install and Setup Docker
+    
+    sudo yum install -y docker-ce-18.09
+    
+    sudo systemctl enable docker && sudo systemctl start docker
+    
+    sudo docker version
+    
+    3. Install Kubernetes packages
+    
+    sudo bash -c 'cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+    
+    [kubernetes]
+    
+    name=Kubernetes
+    
+    baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    
+    enabled=1
+    
+    gpgcheck=1
+    
+    repo_gpgcheck=1
+    
+    gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    
+    exclude=kube*
+    
+    EOF'
+    
+    4. Disable SELinux
+    
+    sudo setenforce 0
+    
+    sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+    
+    swapoff -a
+    
+    5. Install Kubernetes
+    
+    sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+    
+    sudo systemctl enable kubelet && sudo systemctl start kubelet
+    
+    6. Set IPTables settings
+    
+    sudo bash -c cat <<EOF > /etc/sysctl.d/k8s.conf
+    
+    net.bridge.bridge-nf-call-ip6tables = 1
+    
+    net.bridge.bridge-nf-call-iptables = 1
+    
+    EOF
+    
+    sudo sysctl --system
+    
+    sudo lsmod | grep br_netfilter
+    
+    sudo kubeadm config images pull
+    
+    vim etc/hosts
+    
+    127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4
+    
+    ::1 localhost localhost.localdomain localhost6 localhost6.localdomain6
+    
+    10.41.29.144 dev-mast
+    
+    10.41.179.161 dev-worker
+    
+    7. Master Node
+    
+    sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+    
+    mkdir -p $HOME/.kube
+    
+    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+    
+    kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/a70459be0084506e4ec919aa1c114638878db11b/Documentation/kube-flannel.yml
+    
+    8. Worker node
+    
+    vim /usr/lib/systemd/system/docker.service
+    
+    ExecStart=/usr/bin/dockerd-current
+    
+    --add-runtime docker-runc=/usr/libexec/docker/docker-runc-current
+    
+    --default-runtime=docker-runc
+    
+    --exec-opt native.cgroupdriver=systemd // 이것만 수정해준다.( --> To change cgroupfs )
+    
+    --userland-proxy-path=/usr/libexec/docker/docker-proxy-current
+    
+    --init-path=/usr/libexec/docker/docker-init-current
+    
+    --seccomp-profile=/etc/docker/seccomp.json \
+    
+    sudo kubeadm join 10.41.29.144:6443 --token khm95w.mo0wwenu2o9hglls \
+    
+    --discovery-token-ca-cert-hash sha256:aeb0ca593b63c8d674719858fd2397825825cebc552e3c165f00edb9671d6e32 --v=2(skipping verify)
+    
+    systemctl daemon-reload
+    
+    systemctl restart docker
+    
+    kubectl --kubeconfig=kubelet.conf get nodes(check worker, master Node status ready)
+    
+    9. Master Node
+    
+    kubectl label node dev-woreker node-role.kubernetes.io/worker=worker
+    
+    kubectl get nodes(check worker, master Node status ready)
+    
+    kubectl apply -f xxx.yaml
+    
+    10. create service on kubectl
+    
+    Create a Namespace
+    
+    Create a deployment yaml and deploy it.
+    
+    Create a service yaml and deploy it.
+    
+    Access the Jenkins application on a Node Port.
+    
+    11. setup jenkins on kubectl
+    
+    kubectl create ns jenkins // create Namespace
+    
+    vim jenkins-deployment.yaml // create deployment file
+    
+    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>jenkins-deployment.yaml>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    
+    apiVersion: extensions/v1beta1
+    
+    kind: Deployment
+    
+    metadata:
+    
+    name: jenkins-deployment
+    
+    spec:
+    
+    replicas: 1
+    
+    selector:
+    
+    matchLabels:
+    
+    app: jenkins
+    
+    template:
+    
+    metadata:
+    
+    labels:
+    
+    app: jenkins
+    
+    spec:
+    
+    containers:
+    
+    - name: jenkins
+    
+    image: jenkins:2.60.3
+    
+    ports:
+    
+    - containerPort: 8080
+    
+    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>jenkins-deployment.yaml>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    
+    kubectl create -f jenkins-deployment.yaml --namespace=jenkins // create jenkins deployment
+    
+    kubectl describe deployments --namespace=jenkins // get deployment details
+    
+    vim jenkins-service.yaml // create jenkins service
+    
+    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>jenkins-service.yaml>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    
+    apiVersion: v1
+    
+    kind: Service
+    
+    metadata:
+    
+    name: jenkins
+    
+    spec:
+    
+    type: NodePort
+    
+    ports:
+    
+    - port: 8080
+    
+    targetPort: 8080
+    
+    nodePort: 30000
+    
+    selector:
+    
+    app: jenkins
+    
+    >>>>>>>>>>>>>>>>>>>>jenkins-service.yaml>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    
+    kubectl create -f jenkins-service.yaml --namespace=jenkins // create jenkins service
+    
+    http://10.41.29.144:3000 // connect
+    
+    kubectl get pods --namespace=jenkins
+    
+    kubectl logs jenkins-deployment-868cc579df-jxq5m --namespace=jenkins // to get initialAdminPassword
+    
+    12. helm
+    
+    helm install --name my-release stable/jenkins
+    
+    helm status my-release
+    
+    helm delete --purge my-release
+    
+    helm list
+    
+    kubectl get -n kube-system secrets,sa,clusterrolebinding -o name|grep tiller|xargs kubectl -n kube-system delete
+    
+    kubectl get all -n kube-system -l app=helm -o name|xargs kubectl delete -n kube-system
 
 ## Save a file
 
@@ -1615,5 +1849,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3NzE5MjQyMzFdfQ==
+eyJoaXN0b3J5IjpbLTE0NTM3MjcxNDldfQ==
 -->
