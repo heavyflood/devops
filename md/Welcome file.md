@@ -1795,8 +1795,6 @@ kubectl config set-context gce --user=cluster-admin --namespace=foo \
 
 kubectl config unset users.foo # foo 사용자 삭제
 
-3. 오브젝트 생성
-
 # kubectl apply를 실행하여 클러스터에 리소스를 생성하고 업데이트
 
 kubectl apply -f ./my-manifest.yaml # 리소스(들) 생성
@@ -1885,7 +1883,6 @@ username: $(echo -n "jane" | base64 -w0)
 
 EOF
 
-4. 리소스 조회
 
 # 기본 출력을 위한 Get 커맨드
 
@@ -1971,7 +1968,7 @@ kubectl get pods -o json | jq '.items[].spec.containers[].env[]?.valueFrom.secre
 
 kubectl get events --sort-by=.metadata.creationTimestamp
 
-5. 리소스 업데이트
+## 리소스 업데이트
 
 kubectl set image deployment/frontend www=image:v2 # "frontend" 디플로이먼트의 "www" 컨테이너 이미지를 업데이트하는 롤링 업데이트
 
@@ -2013,7 +2010,7 @@ kubectl annotate pods my-pod icon-url=http://goo.gl/XXBTWq # 어노테이션 추
 
 kubectl autoscale deployment foo --min=2 --max=10 # 디플로이먼트 "foo" 오토스케일
 
-6. 리소스 패치
+## 리소스 패치
 
 kubectl patch node k8s-node-1 -p '{"spec":{"unschedulable":true}}' # 노드를 부분적으로 업데이트
 
@@ -2033,13 +2030,13 @@ kubectl patch deployment valid-deployment --type json -p='[{"op": "remove", "pat
 
 kubectl patch sa default --type='json' -p='[{"op": "add", "path": "/secrets/1", "value": {"name": "whatever" } }]'
 
-7. 리소스 편집
+## 리소스 편집
 
 kubectl edit svc/docker-registry # docker-registry라는 서비스 편집
 
 KUBE_EDITOR="nano" kubectl edit svc/docker-registry # 다른 편집기 사용
 
-8. 리소스 스케일링
+## 리소스 스케일링
 
 kubectl scale --replicas=3 rs/foo # 'foo'라는 레플리카 셋을 3으로 스케일
 
@@ -2049,7 +2046,7 @@ kubectl scale --current-replicas=2 --replicas=3 deployment/mysql # mysql이라�
 
 kubectl scale --replicas=5 rc/foo rc/bar rc/baz # 여러 개의 레플리케이션 컨트롤러 스케일
 
-9. 리소스 삭제
+## 리소스 삭제
 
 kubectl delete -f ./pod.json # pod.json에 지정된 유형 및 이름을 사용하여 파드 삭제
 
@@ -2065,7 +2062,7 @@ kubectl -n my-ns delete po,svc --all # 초기화되지 않은 것을 포함하�
 
 kubectl get pods -n mynamespace --no-headers=true | awk '/pattern1|pattern2/{print $1}' | xargs kubectl delete -n mynamespace pod
 
-10. 실행중인 파드와 상호 작용
+## 실행중인 파드와 상호 작용
 
 kubectl logs my-pod # 파드 로그(stdout) 덤프
 
@@ -2097,7 +2094,7 @@ kubectl exec my-pod -c my-container -- ls / # 기존 파드에서 명령 실행(
 
 kubectl top pod POD_NAME --containers # 특정 파드와 해당 컨테이너에 대한 메트릭 표시
 
-11. 노드, 클러스터와 상호 작용
+## 노드, 클러스터와 상호 작용
 
 kubectl cordon my-node # my-node를 스케줄링할 수 없도록 표기
 
@@ -2117,7 +2114,7 @@ kubectl cluster-info dump --output-directory=/path/to/cluster-state # 현재 클
 
 kubectl taint nodes foo dedicated=special-user:NoSchedule
 
-12. 리소스 타입
+## 리소스 타입
 
 kubectl api-resources
 
@@ -2133,7 +2130,7 @@ kubectl api-resources --verbs=list,get # "list"와 "get"의 요청 동사를 지
 
 kubectl api-resources --api-group=extensions # "extensions" API 그룹의 모든 리소스
 
-13. 출력 형식
+## 출력 형식
 
 # 쉼표로 구분된 사용자 정의 열 목록을 사용하여 테이블 출력
 
@@ -2847,5 +2844,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzQ4NTA3MjNdfQ==
+eyJoaXN0b3J5IjpbLTY2NTUxNDU2Nl19
 -->
