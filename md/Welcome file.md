@@ -358,12 +358,12 @@
     
   
  ## 모듈: 
-            정의: 필요할때 로딩하여 사용할 수 있게 만어진 Ruby(.rb)파일
-            [Syntax]
-            module명
-            end
-            로딩: 모듈을 로드할 때는 require를 사용한다
-             [Syntax] require '모듈명' # 필요시 디렉토리경로 써야 함
+    - 정의: 필요할때 로딩하여 사용할 수 있게 만어진 Ruby(.rb)파일
+    [Syntax]
+    module명
+    end
+    - 로딩: 모듈을 로드할 때는 require를 사용한다
+    [Syntax] require '모듈명' # 필요시 디렉토리경로 써야 함
              클래스 안에서 모듈을 로드할 때는 include 를 사용한다
              module My_module
                def greeting
@@ -380,30 +380,29 @@
     	    모듈명::메소드명
 
 ## 구조체
-  
 
-     -Structs : 
-        Struct클래스를 통해 선언한다
-        initialize메소드와 accessor를 자동으로 생성해준다.
+    -Structs : 
+      Struct클래스를 통해 선언한다
+      initialize메소드와 accessor를 자동으로 생성해준다.
         
-        Str = Struct.new(-a, :b) 
-        s1 = Str.new(1,2)
-        s2 = Str.new("1","2")
-        puts s1.a #1이 출력된다. 
-        puts s2.b #"2"가 출력된다.
+      Str = Struct.new(-a, :b) 
+      s1 = Str.new(1,2)
+      s2 = Str.new("1","2")
+      puts s1.a #1이 출력된다. 
+      puts s2.b #"2"가 출력된다.
     
     -OStruct: 
-    Structs와 비슷하다. 
-    속성을 갖지 않는다.
-    OpenStruct 클래스를 통해 선언한다.
+      Structs와 비슷하다. 
+      속성을 갖지 않는다.
+      OpenStruct 클래스를 통해 선언한다.
     
-    require 'ostruct'
+      require 'ostruct'
     
-    person = OpenStruct.new
-    person.name = 'John'
-    person.age = 42
-    person.salary = 250
-    pusts person.name # John
+      person = OpenStruct.new
+      person.name = 'John'
+      person.age = 42
+      person.salary = 250
+      pusts person.name # John
     
     
     
@@ -414,5 +413,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3OTM4OTgzMTQsLTQ3MjA1MDE3MV19
+eyJoaXN0b3J5IjpbLTIwMDU4MzI1ODIsLTQ3MjA1MDE3MV19
 -->
