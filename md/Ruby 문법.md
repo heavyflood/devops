@@ -196,9 +196,8 @@
     
   ## 람다
  
-
     매개변수로 코드블록를 넘길 때 사용한다. 
-     [Syntax] lambda 코드블록
+    [Syntax] lambda 코드블록
 
     (예 1) a = lambda {Ixl x*3) puts a.call 6 # 180이 출력된다.
     (예 2) str_array = ["leonardo", "donatello", "raphael", "michaelangelo") 
@@ -209,6 +208,7 @@
 ## 메소드
 
     - 기본메소드: .length.reverse.upcase.downcase.capitalize.include.gsub.split ...
+    
     - Custom메소드: 
     def로 선언한다.
     메소드명은 소문자로 시작한다
@@ -314,7 +314,7 @@
       2.  attr_writer - Setter 메소드와 동일
       3.  attr_accessor - Getter와 Setter 메소드 한번에
        
-      class Pets # 왼쪽 소스의 Getter와 Setter를 name으로 한번에 구현
+      class Pets # Getter와 Setter를 name으로 한번에 구현
          attr_accessor name
             def initialize(name, age)
                 @name = name
@@ -333,15 +333,18 @@
           puts "Hi, my pet" 
        end 
      end 
+     
      Pets.greeting # 클래스명을 통해 직접 호출
      
      - 클래스 상수(Const): 변하지 않는 값, 대문자로 시작해야하며 모두 대문자로 명명
       class Calc
         PI = 3.14
       end
+      
       puts Calc::PI # 3.14
      
      - to_s 메소드: 클래스객체를 출력시, 호출되는 메소드로 클래스내에 자동으로 Built-In
+     
      - 상속: 상속받으면 부모클래스의 메소드 등을 사용가능: < 기호를 사용하여 상속받는다 
       class Dog < Animal # Dog class는 Animal 클래스를 상속받음
       
@@ -435,5 +438,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjMzOTU3NTE5LDEzNDA3NzY1MDZdfQ==
+eyJoaXN0b3J5IjpbLTk4NzAwMjIxMCwxMzQwNzc2NTA2XX0=
 -->
