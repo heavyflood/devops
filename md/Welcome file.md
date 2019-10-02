@@ -57,15 +57,20 @@
 
     - 파일생성: file=File.new('test.txt','w+')
     - 파일열기: file=File.open('test.txt','w+')
+   
     - 파일읽기: 
     File.read('test.txt')
     File.readlines('test.txt')
     - 파일존재여부: File.file?('test.txt')
-    - 파일정보 확인: if File.zero?("test.txt")
-                      file = File.open("test.txt", "r+")
-                      puts file.size
-                    end
+    
+    - 파일정보 확인: 
+      if File.zero?("test.txt")
+         file = File.open("test.txt", "r+")
+         puts file.size
+      end
+      
     - 파일닫기: file.close
+    
     - 파일모드: 
     r(read-only)
     r+(read-write)
@@ -73,6 +78,7 @@
     w+(read-write)
     a(write-only)
     a+(read-write)
+    
     - 파일 모드 확인:
      File.readable?("test.txt")
      File.writable?("test.txt")
@@ -81,9 +87,10 @@
    
  ## 범위
 
-      - 마침표 2개 
-        [Syntax] 시작값 종료값 (종료값 포함) my_array = (1..5).to_a
+    - 마침표 2개 
+    [Syntax] 시작값 종료값 (종료값 포함) my_array = (1..5).to_a
     puts my_array #[1,2,3,4,5)
+    
     - 마침표 3개 
     [Syntax] 시작값.. 종료값 (종료값 미포함)
     my_array = (1...5).to_a puts my_array # [1,2,3,4]
@@ -99,7 +106,9 @@
     - 조건문 : 
     if elsif else end 
     puts "True" if true (한줄 문) -
-    unless .. else .. end | puts "False" unless false (한줄 unless문) | | case .. when .. when .. else .. end 
+    unless .. else .. end 
+    | puts "False" unless false (한줄 unless문) 
+    | | case .. when .. when .. else .. end 
     
     - 반복문 : 
     while .. end
@@ -147,6 +156,7 @@
     my_hash2 = {":A"=>4. "B" =>5, "C"=>6} # A,B,C는 my_hash1과 동일 메모리공간 사용!!
     puts my_hash1[:A]
     puts my_hash2[A] 
+    
     - 반복자(.each, .tiles, .collect)
     배열이나 해쉬의 각 원소에 대해 순차적으로 코드블록의 내용을 수행한다.
     (해쉬에 사용)
@@ -425,5 +435,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTU1NTE3NDk0LC00NzIwNTAxNzFdfQ==
+eyJoaXN0b3J5IjpbNzM0ODQ2MjQ0LC00NzIwNTAxNzFdfQ==
 -->
