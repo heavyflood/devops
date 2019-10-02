@@ -119,7 +119,7 @@
     loop {-} 
     
   
-  9. 컬렉션 : 
+  ## 컬렉션 
 
     - 배열:
     1차원 배열 
@@ -435,5 +435,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTgxMDU2MzEwNCwxMzQwNzc2NTA2XX0=
+eyJoaXN0b3J5IjpbMjMzOTU3NTE5LDEzNDA3NzY1MDZdfQ==
 -->
