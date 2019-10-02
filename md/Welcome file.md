@@ -21,11 +21,11 @@
 
  Guide
 ===================================
-# 자료형: 
+## 자료형: 
 
     3가지의 자료형을 자동으로 인식 (numbers, boolean, strings)
 
-# 연산자: 
+## 연산자: 
 
     산술 : + (덧셈). - (뺄셈). * (곱셈). / (나눗셈) ** (거듭제곱 : 23은 2의 3승), % (나머지)
     관계: == (같다). != 다르다) >, >= (크다. 크거나 같다) |< <= (작다. 작거나 같다)
@@ -33,19 +33,23 @@
     논리: && (AND), |(OR)
     3.
 
- 주석: 
-- 단일행주석: # 단일행 주석입니다
-- 복수행주석: =begin
-               복수행주석
-               입니다.
-             =end
-4. 표준입출력
+ ## 주석: 
+
+    - 단일행주석: # 단일행 주석입니다
+    - 복수행주석: 
+    	- =begin
+                   복수행주석
+                   입니다.
+                 =end
+    
+   ##  표준입출력
 - 출력:
   puts "hi, ruby" (자동개행)
   print "Hi, ruby" (개행불가)
 - 입력:
   my_input=gets.chomp(맨뒤의 Enter키 무시)
   my_input=gets(Enter키 누르기전까지 내용인식)
+  
 5. 파일입출력
 - 파일생성: file=File.new('test.txt','w+')
 - 파일열기: file=File.open('test.txt','w+')
@@ -365,5 +369,5 @@ person.age = 42
 person.salary = 250
 pusts person.name # John
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTgyMjM0MjYwNF19
+eyJoaXN0b3J5IjpbLTEwNTQxNTMzM119
 -->
