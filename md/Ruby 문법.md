@@ -386,7 +386,9 @@
     - 정의: 필요할때 로딩하여 사용할 수 있게 만어진 Ruby(.rb)파일
     [Syntax]
     module명
+      ...
     end
+    
     - 로딩: 모듈을 로드할 때는 require를 사용한다
     [Syntax] require '모듈명' # 필요시 디렉토리경로 써야 함
     클래스 안에서 모듈을 로드할 때는 include 를 사용한다
@@ -398,6 +400,7 @@
     class A
       include My_module
     end
+    
     - 모듈을 사용할떄는 다음 구문형식 사용
     [Syntax1]
     모듈명.메소드명
@@ -438,5 +441,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTk4NzAwMjIxMCwxMzQwNzc2NTA2XX0=
+eyJoaXN0b3J5IjpbLTE4MzM4MjIzNjgsMTM0MDc3NjUwNl19
 -->
