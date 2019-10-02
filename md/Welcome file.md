@@ -116,13 +116,17 @@
     1차원 배열 
     my_array = [1.2.3]
     my_array[0] # 반환값은 1
+    
     2차원 배열 
     my_2d_array = [[1,2,31.[4,5,6]] 
     my 2d array[0][1] # 반환값은 2
+    
     배열 마지막에 원소 추가 
     my_array.push(4) # my_array는 [1,2,3,4]
+    
     배열의 마지막 원소 추출
     my_array.pop
+    
     - 해쉬(해쉬생성/정렬):
     배열과 유사하나 index를 문자로 사용가능
     일종의 key-value쌍의 맵관 동일
@@ -131,10 +135,12 @@
     my hash[Bj = 4 #키 B 의 값이 20에서 4로 변경됨
     my_hash = Hash.new # my_hash = 과 동일 기능 // 해쉬 생성
     my_hash.sort_by do |key, value|
-        value 
+      value 
     end
+    
     해쉬를 사용하여 동일 Key를 사용할 때 메모리 낭비를 줄일 수 있다
     my_sym = animals 
+    
     - 심볼
     여러 개의 해쉬에서 동일 Key를 사용해야 할 경우 유용하다
     my_hash1 = {":A"=>1. "B"=>2. "C" =>3}
@@ -164,9 +170,10 @@
     배열 등의 각 원소값에 동일 작업을 한다.
     arr1 = [1,2,3,4,5] 
     arr2 = arr1.collect! {x|x*2}
+    // collect
     
    
- ## 프로시져: 
+ ## 프로시져
 
     Proc 클래스를 사용하여 선언할 수 있다. 
     [Syntax] 프로시져명 = Proc.new 코드블록
@@ -193,7 +200,8 @@
 
     - 기본메소드: .length.reverse.upcase.downcase.capitalize.include.gsub.split ...
     - Custom메소드: 
-    def로 선언한다.메소드명은 소문자로 시작한다
+    def로 선언한다.
+    메소드명은 소문자로 시작한다
     def my_method(name, age)
         puts "I'm #{name}, I'm #{age} years old"
     end
@@ -209,13 +217,16 @@
     def my_method(name, age=30) 
         puts "I'm #{name}, I'm #{age} years old 
     end
+    
     my_method("Mike", 26)
     my_method("Mike")
+    
     파라미터에 Optional파라미터를 설정할 수 있다.
     def my_method(*my_info) 
         puts "I'm #{my_info[0]}, I'm #{my_info[1]} years old 
     end
     my_method("Mike", 26)
+    
     return을 이용해 값을 반환할 수 있다
     def squares(a,b,c)
         return a*a, b*b, c*c
@@ -414,5 +425,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzE0MzUyMTEyLC00NzIwNTAxNzFdfQ==
+eyJoaXN0b3J5IjpbOTU1NTE3NDk0LC00NzIwNTAxNzFdfQ==
 -->
