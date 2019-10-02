@@ -272,29 +272,33 @@
       def initialize(name, age)
          @name = name
          @age = age 
-                end
-                def get_name
-                 @name 
-                end
-                def set_name=(name) # Setter
-                  @name = name 
-                end
-            end
-            p1 = Pets.new("Bbobby", 3) 
-            p2 = Pets.new("Noorie", 6)
-            p1.set_name("asdasd")
-            puts.p1.get_name
+      end
+      
+      def get_name
+        @name 
+      end
+      
+      def set_name=(name) # Setter
+         @name = name 
+      end
+    end
+    
+    p1 = Pets.new("Bbobby", 3) 
+    p2 = Pets.new("Noorie", 6)
+    p1.set_name("asdasd")
+    puts.p1.get_name
             
-            - Getter/Setter는 한줄표현가능:
-            attr_reader - Getter 메소드와 동일
-            attr_writer - Setter 메소드와 동일
-            attr_accessor - Getter와 Setter 메소드 한번에
-            class Pets # 왼쪽 소스의 Getter와 Setter를 name으로 한번에 구현
-              attr_accessor name
-              def initialize(name, age)
+    - Getter/Setter는 한줄표현가능:
+      1. attr_reader - Getter 메소드와 동일
+      2.  attr_writer - Setter 메소드와 동일
+      3.  attr_accessor - Getter와 Setter 메소드 한번에
+       
+      class Pets # 왼쪽 소스의 Getter와 Setter를 name으로 한번에 구현
+         attr_accessor name
+            def initialize(name, age)
                 @name = name
                 @age = age 
-              end
+             end
             end
             
             p1 = Pets.new("Bbobby", 3) 
@@ -407,5 +411,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NjI1MzU0NiwtNDcyMDUwMTcxXX0=
+eyJoaXN0b3J5IjpbLTcyOTkwMDQ0MCwtNDcyMDUwMTcxXX0=
 -->
