@@ -379,7 +379,7 @@
        3. protected: 클래스 자신과 자식클래스만 접근가능하다
        
      
-## 모듈: 
+## 모듈
     - 정의: 필요할때 로딩하여 사용할 수 있게 만어진 Ruby(.rb)파일
     [Syntax]
     module명
@@ -435,5 +435,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTM0MDc3NjUwNl19
+eyJoaXN0b3J5IjpbMTgxMDU2MzEwNCwxMzQwNzc2NTA2XX0=
 -->
