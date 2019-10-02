@@ -79,35 +79,39 @@
      File.executable?("test.txt")
      
    
- 6. 범위
+ ## 범위
 
-        - 마침표 2개 
+      - 마침표 2개 
         [Syntax] 시작값 종료값 (종료값 포함) my_array = (1..5).to_a
     puts my_array #[1,2,3,4,5)
     - 마침표 3개 
     [Syntax] 시작값.. 종료값 (종료값 미포함)
     my_array = (1...5).to_a puts my_array # [1,2,3,4]
-    7. 코
+    
+    
+## 코드블록 
 
-드블록 
-- 한줄로 쓸 때: {#수행될 코드}
-- 여러행으로 쓸 때: do | 파라미터
-8. 제어문
-- 조건문 : 
-if elsif else end 
-puts "True" if true (한줄 문) -
-unless .. else .. end | puts "False" unless false (한줄 unless문) | | case .. when .. when .. else .. end 
+    - 한줄로 쓸 때: {#수행될 코드}
+    - 여러행으로 쓸 때: do | 파라미터
 
-- 반복문 : 
-while .. end
-until . end 
-for 변수 in 시작값, 종료값 ~ end (종료값까지) 
-for 반복문 for 변수 in 시작값...종료값 ~ end (종료값 이전까지).
-loop do-end
-loop {-} 
+## 제어문
 
-9. 컬렉션 : 
-배열:
+    - 조건문 : 
+    if elsif else end 
+    puts "True" if true (한줄 문) -
+    unless .. else .. end | puts "False" unless false (한줄 unless문) | | case .. when .. when .. else .. end 
+    
+    - 반복문 : 
+    while .. end
+    until . end 
+    for 변수 in 시작값, 종료값 ~ end (종료값까지) 
+    for 반복문 for 변수 in 시작값...종료값 ~ end (종료값 이전까지).
+    loop do-end
+    loop {-} 
+    
+  
+  9. 컬렉션 : 
+- 배열:
 1차원 배열 
 my_array = [1.2.3]
 my_array[0] # 반환값은 1
@@ -118,7 +122,7 @@ my 2d array[0][1] # 반환값은 2
 my_array.push(4) # my_array는 [1,2,3,4]
 배열의 마지막 원소 추출
 my_array.pop
-해쉬(해쉬생성/정렬):
+- 해쉬(해쉬생성/정렬):
 배열과 유사하나 index를 문자로 사용가능
 일종의 key-value쌍의 맵관 동일
 my_hash = {"A"=> 1, "B"=>2, "C" => 3} 
@@ -130,17 +134,13 @@ my_hash.sort_by do |key, value|
 end
 해쉬를 사용하여 동일 Key를 사용할 때 메모리 낭비를 줄일 수 있다
 my_sym = animals 
-
-
-심볼
+- 심볼
 여러 개의 해쉬에서 동일 Key를 사용해야 할 경우 유용하다
 my_hash1 = {":A"=>1. "B"=>2. "C" =>3}
 my_hash2 = {":A"=>4. "B" =>5, "C"=>6} # A,B,C는 my_hash1과 동일 메모리공간 사용!!
 puts my_hash1[:A]
 puts my_hash2[A] 
-
-
-반복자(.each, .tiles, .collect)
+- 반복자(.each, .tiles, .collect)
 배열이나 해쉬의 각 원소에 대해 순차적으로 코드블록의 내용을 수행한다.
 (해쉬에 사용)
 [Syntax] 해쉬명.each코드블록
@@ -377,6 +377,7 @@ person.name = 'John'
 person.age = 42
 person.salary = 250
 pusts person.name # John
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTc4NDI2MDgzNF19
+eyJoaXN0b3J5IjpbMjA0NjIxODE5MV19
 -->
