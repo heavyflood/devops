@@ -43,44 +43,53 @@
                  =end
     
    ##  표준입출력
-- 출력:
-  puts "hi, ruby" (자동개행)
-  print "Hi, ruby" (개행불가)
-- 입력:
-  my_input=gets.chomp(맨뒤의 Enter키 무시)
-  my_input=gets(Enter키 누르기전까지 내용인식)
-  
-5. 파일입출력
-- 파일생성: file=File.new('test.txt','w+')
-- 파일열기: file=File.open('test.txt','w+')
-- 파일읽기: 
-File.read('test.txt')
-File.readlines('test.txt')
-- 파일존재여부: File.file?('test.txt')
-- 파일정보 확인: if File.zero?("test.txt")
-                  file = File.open("test.txt", "r+")
-                  puts file.size
-                end
-- 파일닫기: file.close
-- 파일모드: 
-r(read-only)
-r+(read-write)
-w(write-only)
-w+(read-write)
-a(write-only)
-a+(read-write)
-- 파일 모드 확인:
- File.readable?("test.txt")
- File.writable?("test.txt")
- File.executable?("test.txt")
-6. 범위
-- 마침표 2개 
-[Syntax] 시작값 종료값 (종료값 포함) my_array = (1..5).to_a
-puts my_array #[1,2,3,4,5)
-- 마침표 3개 
-[Syntax] 시작값.. 종료값 (종료값 미포함)
-my_array = (1...5).to_a puts my_array # [1,2,3,4]
-7. 코드블록 
+
+    - 출력:
+      puts "hi, ruby" (자동개행)
+      print "Hi, ruby" (개행불가)
+    - 입력:
+      my_input=gets.chomp(맨뒤의 Enter키 무시)
+      my_input=gets(Enter키 누르기전까지 내용인식)
+      
+    
+
+## 파일입출력
+
+    - 파일생성: file=File.new('test.txt','w+')
+    - 파일열기: file=File.open('test.txt','w+')
+    - 파일읽기: 
+    File.read('test.txt')
+    File.readlines('test.txt')
+    - 파일존재여부: File.file?('test.txt')
+    - 파일정보 확인: if File.zero?("test.txt")
+                      file = File.open("test.txt", "r+")
+                      puts file.size
+                    end
+    - 파일닫기: file.close
+    - 파일모드: 
+    r(read-only)
+    r+(read-write)
+    w(write-only)
+    w+(read-write)
+    a(write-only)
+    a+(read-write)
+    - 파일 모드 확인:
+     File.readable?("test.txt")
+     File.writable?("test.txt")
+     File.executable?("test.txt")
+     
+   
+ 6. 범위
+
+        - 마침표 2개 
+        [Syntax] 시작값 종료값 (종료값 포함) my_array = (1..5).to_a
+    puts my_array #[1,2,3,4,5)
+    - 마침표 3개 
+    [Syntax] 시작값.. 종료값 (종료값 미포함)
+    my_array = (1...5).to_a puts my_array # [1,2,3,4]
+    7. 코
+
+드블록 
 - 한줄로 쓸 때: {#수행될 코드}
 - 여러행으로 쓸 때: do | 파라미터
 8. 제어문
@@ -369,5 +378,5 @@ person.age = 42
 person.salary = 250
 pusts person.name # John
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwNTQxNTMzM119
+eyJoaXN0b3J5IjpbLTc4NDI2MDgzNF19
 -->
