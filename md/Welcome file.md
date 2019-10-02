@@ -247,7 +247,7 @@ class Pets
     puts "Hi, my pet" 
   end 
 end
-
+ 
 클래스 객체 생성: 
 [Syntax] 객체명 = 클래스명 new 서연 객체 생성
 class Pets 
@@ -394,5 +394,5 @@ pusts person.name # John
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ3MjA1MDE3MV19
+eyJoaXN0b3J5IjpbMTg0ODkxMjM3NywtNDcyMDUwMTcxXX0=
 -->
