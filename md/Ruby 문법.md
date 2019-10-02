@@ -409,7 +409,7 @@
 
 ## 구조체
 
-    -Structs : 
+    - Structs : 
       Struct클래스를 통해 선언한다
       initialize메소드와 accessor를 자동으로 생성해준다.
         
@@ -419,7 +419,7 @@
       puts s1.a #1이 출력된다. 
       puts s2.b #"2"가 출력된다.
     
-    -OStruct: 
+    - OStruct: 
       Structs와 비슷하다. 
       속성을 갖지 않는다.
       OpenStruct 클래스를 통해 선언한다.
@@ -441,5 +441,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4MzM4MjIzNjgsMTM0MDc3NjUwNl19
+eyJoaXN0b3J5IjpbMTgxNjUyNjgxNCwxMzQwNzc2NTA2XX0=
 -->
