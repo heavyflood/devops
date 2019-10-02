@@ -246,32 +246,32 @@
         def initialize
            puts "Hi, my pet" 
         end 
-                end
+      end
     
     -  클래스 객체 생성: 
-        [Syntax] 객체명 = 클래스명 new 서연 객체 생성
-        class Pets 
-          def initialize
-            puts "Hi, my pet" 
-          end 
-        end
-        p1 = Pets.new  # Hi, my pet
-        p2 = Pets.new  # Hi, my pet 
+    [Syntax] 객체명 = 클래스명 new 객체 생성
+    class Pets 
+      def initialize
+        puts "Hi, my pet" 
+      end 
+    end
+    p1 = Pets.new  # Hi, my pet
+    p2 = Pets.new  # Hi, my pet 
     
-        - 변수명 앞에 문자를 사용한다:
-          class Pets 
-            def initialize(name, age)
-              @name = name
-              @age = age 
-            end 
-          end
+    - 변수명 앞에 문자를 사용한다:
+    class Pets 
+      def initialize(name, age)
+        @name = name
+        @age = age 
+      end 
+    end
          
-          - Instance 메소드 : 클래스안의 일반적인 메소드
-            클래스밖에서 Instance 변수로 접근하기 위해 Getter/Setter메소드가 사용된다
-              class Pets 
-                def initialize(name, age)
-                  @name = name
-                  @age = age 
+    - Instance 메소드 : 클래스안의 일반적인 메소드
+    클래스밖에서 Instance 변수로 접근하기 위해 Getter/Setter메소드가 사용된다
+    class Pets 
+      def initialize(name, age)
+         @name = name
+         @age = age 
                 end
                 def get_name
                  @name 
@@ -407,5 +407,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzNTkxNDE2NzYsLTQ3MjA1MDE3MV19
+eyJoaXN0b3J5IjpbLTE2NjI1MzU0NiwtNDcyMDUwMTcxXX0=
 -->
