@@ -322,33 +322,35 @@
      
      - to_s 메소드: 클래스객체를 출력시, 호출되는 메소드로 클래스내에 자동으로 Built-In
      - 상속: 상속받으면 부모클래스의 메소드 등을 사용가능: < 기호를 사용하여 상속받는다 
-            class Dog < Animal # Dog class는 Animal 클래스를 상속받음
-            부모, 자식클래스에 동일이름의 메소드가 있을 때는 자기 클래스의 메소드가 우선순위가 높다
-            super 메소드를 사용하면 부모클래스의 메소드도 수행된다
-            class Animal
-              def initialize(name)
-                @name = name
-              end
-            end
+      class Dog < Animal # Dog class는 Animal 클래스를 상속받음
+      
+      부모, 자식클래스에 동일이름의 메소드가 있을 때는 자기 클래스의 메소드가 우선순위가 높다
+      super 메소드를 사용하면 부모클래스의 메소드도 수행된다
+      class Animal
+         def initialize(name)
+            @name = name
+         end
+      end
             
-            class Cat < Animal
-              def initialize(name, age)
-                super(name)
-                @age = age
-              end
-              def to_s
-                "#{@name} is # {@age} t"
-              end
-            end
-            - 접근제어: public, private, protected 지원
-            public: 모든 클래스는 별도 지정하지 않으면 기본적으로 public 이다.
-            private: 클래스 내부에서만 접근 가능하다.
-            class Person 
-              def initialize(age)
-                @age = age end def show
-                puts "#{@age} years = #{days_lived) days" 근제어
-              end 
-              private 
+      class Cat < Animal
+         def initialize(name, age)
+           super(name)
+             @age = age
+         end
+         def to_s
+           "#{@name} is # {@age} t"
+         end
+       end
+     
+     - 접근제어: public, private, protected 지원
+      public: 모든 클래스는 별도 지정하지 않으면 기본적으로 public 이다.
+      private: 클래스 내부에서만 접근 가능하다.
+       class Person 
+          def initialize(age)
+             @age = age end def show
+             puts "#{@age} years = #{days_lived) days"
+          end 
+          private 
               def days_lived
                 @age * 365 
               end 
@@ -412,5 +414,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ4MzA1NzUxNiwtNDcyMDUwMTcxXX0=
+eyJoaXN0b3J5IjpbODkxODQ4NDgsLTQ3MjA1MDE3MV19
 -->
