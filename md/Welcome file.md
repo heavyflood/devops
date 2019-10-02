@@ -241,32 +241,30 @@
       - 선언/객체 생성: class키워드로 선언, 클래스명의 첫문자는 대문자로 해야 한다 
           class Animals 
             end
-            클래스에는 initialize 메소드가 있어야 한다 :
+            # 클래스에는 initialize 메소드가 있어야 한다 
             class Pets 
               def initialize
                 puts "Hi, my pet" 
               end 
             end
              
-            - 클래스 객체 생성: 
-            [Syntax] 객체명 = 클래스명 new 서연 객체 생성
-            class Pets 
-              def initialize
-                puts "Hi, my pet" 
-              end 
-            end
-            p1 = Pets.new
-            p2 = Pets.new
-            각각 initialize 메소드의 내용이 출력됨
-             # Hi, my pet 
-             # Hi, my pet
-             변수명 앞에 문자를 사용한다:
-             class Pets 
-               def initialize(name, age)
-                 @name = name
-                 @age = age 
-               end 
-            end
+       - 클래스 객체 생성: 
+        [Syntax] 객체명 = 클래스명 new 서연 객체 생성
+        class Pets 
+          def initialize
+            puts "Hi, my pet" 
+          end 
+        end
+        p1 = Pets.new  # Hi, my pet
+        p2 = Pets.new  # Hi, my pet 
+
+        - 변수명 앞에 문자를 사용한다:
+          class Pets 
+            def initialize(name, age)
+              @name = name
+              @age = age 
+            end 
+         end
             - Instance 메소드 : 클래스안의 일반적인 메소드
               클래스밖에서 Instance 변수로 접근하기 위해 Getter/Setter메소드가 사용된다
               class Pets 
@@ -396,5 +394,5 @@ pusts person.name # John
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQwNjYwNjcwMCwtNDcyMDUwMTcxXX0=
+eyJoaXN0b3J5IjpbLTExMDM0NzY1OCwtNDcyMDUwMTcxXX0=
 -->
