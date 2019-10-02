@@ -238,19 +238,17 @@
     
 ## 클래스
 
-  
-
     - 선언/객체 생성: class키워드로 선언, 클래스명의 첫문자는 대문자로 해야 한다 
-          class Animals 
-            end
-            # 클래스에는 initialize 메소드가 있어야 한다 
-            class Pets 
-              def initialize
-                puts "Hi, my pet" 
-              end 
-            end
-             
-       - 클래스 객체 생성: 
+      class Animals 
+      end
+      # 클래스에는 initialize 메소드가 있어야 한다 
+      class Pets 
+        def initialize
+           puts "Hi, my pet" 
+        end 
+                end
+    
+    -  클래스 객체 생성: 
         [Syntax] 객체명 = 클래스명 new 서연 객체 생성
         class Pets 
           def initialize
@@ -352,7 +350,8 @@
             end
             protected: 클래스 자신과 자식클래스만 접근가능하다
        
-     ## 모듈: 
+     
+## 모듈: 
     - 정의: 필요할때 로딩하여 사용할 수 있게 만어진 Ruby(.rb)파일
     [Syntax]
     module명
@@ -408,5 +407,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3MDIyODcwNDAsLTQ3MjA1MDE3MV19
+eyJoaXN0b3J5IjpbLTEzNTkxNDE2NzYsLTQ3MjA1MDE3MV19
 -->
