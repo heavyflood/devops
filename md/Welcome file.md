@@ -237,126 +237,128 @@
     puts $x # 3
     
 ## 클래스
-    - 선언/객체 생성: 
-    class키워드로 선언, 클래스명의 첫문자는 대문자로 해야 한다 :
-class Animals 
-end
-클래스에는 initialize 메소드가 있어야 한다 :
-class Pets 
-  def initialize
-    puts "Hi, my pet" 
-  end 
-end
- 
-클래스 객체 생성: 
-[Syntax] 객체명 = 클래스명 new 서연 객체 생성
-class Pets 
-  def initialize
-    puts "Hi, my pet" 
-  end 
-end
-p1 = Pets.new
-p2 = Pets.new
-각각 initialize 메소드의 내용이 출력됨
- # Hi, my pet 
- # Hi, my pet
- 변수명 앞에 문자를 사용한다:
- class Pets 
-   def initialize(name, age)
-     @name = name
-     @age = age 
-   end 
-end
-- Instance 메소드 : 클래스안의 일반적인 메소드
-  클래스밖에서 Instance 변수로 접근하기 위해 Getter/Setter메소드가 사용된다
-  class Pets 
-    def initialize(name, age)
-      @name = name
-      @age = age 
-    end
-# Getter
-    def get_name
-|     @name 
-    end
-    def set_name=(name) # Setter
-      @name = name 
-    end
-end
-p1 = Pets.new("Bbobby", 3) 
-p2 = Pets.new("Noorie", 6)
-p1.set_name("asdasd")
-puts.p1.get_name
-Getter/Setter는 한줄표현가능:
-attr_reader - Getter 메소드와 동일
-attr_writer - Setter 메소드와 동일
-attr_accessor - Getter와 Setter 메소드 한번에
-class Pets # 왼쪽 소스의 Getter와 Setter를 name이라는 이름으로 한번에 구현했다. 
-  attr_accessor name
-| def initialize(name, age)
-    @name = name
-    @age = age 
-  end
-end
-p1 = Pets.new("Bbobby", 3) 
-p2 = Pets.new("Noorie", 6)
-p1.name("asd")
-- 클래스 메소드: 클래스 자기자신이 직접호출할 수 있는 메소드
-self 키워드를 통해 정의할 수 있다
-class Pets 
-    def self.greeting
-        puts "Hi, my pet" 
-    end 
-end 
-Pets.greeting # 클래스명을 통해 직접 호출
-- 클래스 상수(Const): 변하지 않는 값, 대문자로 시작해야하며 모두 대문자로 명명하는게 일반적
-class Calc
-  PI = 3.14
-end
-puts Calc::PI # 3.14
-- to_s 메소드: 클래스객체를 출력할떄, 호출되는 메소드로 클래스내에 자동으로 Built-In됨
-- 상속: 
-상속받으면 부모클래스의 메소드 등을 사용가능
-< 기호를 사용하여 상속받는다 
-class Dog < Animal # Dog class는 Animal 클래스를 상속받음
-부모, 자식클래스에 동일이름의 메소드가 있을 때는 자기 클래스의 메소드가 우선순위가 높다
-super 메소드를 사용하면 부모클래스의 메소드도 수행된다
-class Animal
-  def initialize(name)
-    @name = name
-  end
-end
 
-class Cat < Animal
-  def initialize(name, age)
-    super(name)
-    @age = age
-  end
-  def to_s
-    "#{@name} is # {@age} t"
-  end
-end
-- 접근제어: public, private, protected 지원
-public: 모든 클래스는 별도 지정하지 않으면 기본적으로 public 이다.
-private: 클래스 내부에서만 접근 가능하다.
-class Person 
-  def initialize(age)
-    @age = age end def show
-    puts "#@age} years = #{days_lived) days" 근제어
-  end 
-  private 
-  def days_lived
-    @age * 365 
-  end 
-end
-protected: 클래스 자신과 자식클래스만 접근가능하다
-15. 모듈: 
-정의: 필요할때 로딩하여 사용할 수 있게 만들어진 Ruby(.rb)파일
-[Syntax]
-module명
-end
-로딩:
-모듈을 로드할 때는 require를 사용한다
-[Syntax] require '모듈명' # 필요시 디렉토리경로 써야 함
+        - 선언/객체 생성: 
+        class키워드로 선언, 클래스명의 첫문자는 대문자로 해야 한다 :
+    class Animals 
+    end
+    클래스에는 initialize 메소드가 있어야 한다 :
+    class Pets 
+      def initialize
+        puts "Hi, my pet" 
+      end 
+    end
+     
+    - 클래스 객체 생성: 
+    [Syntax] 객체명 = 클래스명 new 서연 객체 생성
+    class Pets 
+      def initialize
+        puts "Hi, my pet" 
+      end 
+    end
+    p1 = Pets.new
+    p2 = Pets.new
+    각각 initialize 메소드의 내용이 출력됨
+     # Hi, my pet 
+     # Hi, my pet
+     변수명 앞에 문자를 사용한다:
+     class Pets 
+       def initialize(name, age)
+         @name = name
+         @age = age 
+       end 
+    end
+    - Instance 메소드 : 클래스안의 일반적인 메소드
+      클래스밖에서 Instance 변수로 접근하기 위해 Getter/Setter메소드가 사용된다
+      class Pets 
+        def initialize(name, age)
+          @name = name
+          @age = age 
+        end
+        def get_name
+         @name 
+        end
+        def set_name=(name) # Setter
+          @name = name 
+        end
+    end
+    p1 = Pets.new("Bbobby", 3) 
+    p2 = Pets.new("Noorie", 6)
+    p1.set_name("asdasd")
+    puts.p1.get_name
+    
+    - Getter/Setter는 한줄표현가능:
+    attr_reader - Getter 메소드와 동일
+    attr_writer - Setter 메소드와 동일
+    attr_accessor - Getter와 Setter 메소드 한번에
+    class Pets # 왼쪽 소스의 Getter와 Setter를 name이라는 이름으로 한번에 구현했다. 
+      attr_accessor name
+    | def initialize(name, age)
+        @name = name
+        @age = age 
+      end
+    end
+    p1 = Pets.new("Bbobby", 3) 
+    p2 = Pets.new("Noorie", 6)
+    p1.name("asd")
+    - 클래스 메소드: 클래스 자기자신이 직접호출할 수 있는 메소드
+    self 키워드를 통해 정의할 수 있다
+    class Pets 
+        def self.greeting
+            puts "Hi, my pet" 
+        end 
+    end 
+    Pets.greeting # 클래스명을 통해 직접 호출
+    - 클래스 상수(Const): 변하지 않는 값, 대문자로 시작해야하며 모두 대문자로 명명
+    class Calc
+      PI = 3.14
+    end
+    puts Calc::PI # 3.14
+    - to_s 메소드: 클래스객체를 출력할떄, 호출되는 메소드로 클래스내에 자동으로 Built-In됨
+    - 상속: 
+    상속받으면 부모클래스의 메소드 등을 사용가능: < 기호를 사용하여 상속받는다 
+    class Dog < Animal # Dog class는 Animal 클래스를 상속받음
+    부모, 자식클래스에 동일이름의 메소드가 있을 때는 자기 클래스의 메소드가 우선순위가 높다
+    super 메소드를 사용하면 부모클래스의 메소드도 수행된다
+    class Animal
+      def initialize(name)
+        @name = name
+      end
+    end
+    
+    class Cat < Animal
+      def initialize(name, age)
+        super(name)
+        @age = age
+      end
+      def to_s
+        "#{@name} is # {@age} t"
+      end
+    end
+    - 접근제어: public, private, protected 지원
+    public: 모든 클래스는 별도 지정하지 않으면 기본적으로 public 이다.
+    private: 클래스 내부에서만 접근 가능하다.
+    class Person 
+      def initialize(age)
+        @age = age end def show
+        puts "#@age} years = #{days_lived) days" 근제어
+      end 
+      private 
+      def days_lived
+        @age * 365 
+      end 
+    end
+    protected: 클래스 자신과 자식클래스만 접근가능하다
+    15. 모듈: 
+    정의: 필요할때 로딩하여 사용할 수 있게 만들어진 Ruby(.rb)파일
+    [Syntax]
+    module명
+    end
+    로딩:
+    모듈을 로드할 때는 require를 사용한다
+    [Syntax] re
+
+quire '모듈명' # 필요시 디렉토리경로 써야 함
 클래스 안에서 모듈을 로드할 때는 include 를 사용한다
 module My_module
     def greeting
@@ -394,5 +396,5 @@ pusts person.name # John
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTg0ODkxMjM3NywtNDcyMDUwMTcxXX0=
+eyJoaXN0b3J5IjpbMjg0MDM3NTA0LC00NzIwNTAxNzFdfQ==
 -->
