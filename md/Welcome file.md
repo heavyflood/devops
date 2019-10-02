@@ -235,11 +235,10 @@
     
     change
     puts $x # 3
-    13.클래스
+    
+## 클래스
     - 선언/객체 생성: 
-    class키워드로 선언, 클래스명의 첫문
-
-자는 대문자로 해야 한다 :
+    class키워드로 선언, 클래스명의 첫문자는 대문자로 해야 한다 :
 class Animals 
 end
 클래스에는 initialize 메소드가 있어야 한다 :
@@ -248,6 +247,7 @@ class Pets
     puts "Hi, my pet" 
   end 
 end
+
 클래스 객체 생성: 
 [Syntax] 객체명 = 클래스명 new 서연 객체 생성
 class Pets 
@@ -394,5 +394,5 @@ pusts person.name # John
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyNDU4MTgzNTFdfQ==
+eyJoaXN0b3J5IjpbLTQ3MjA1MDE3MV19
 -->
