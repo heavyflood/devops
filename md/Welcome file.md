@@ -238,7 +238,9 @@
     
 ## 클래스
 
-      - 선언/객체 생성: class키워드로 선언, 클래스명의 첫문자는 대문자로 해야 한다 
+  
+
+    - 선언/객체 생성: class키워드로 선언, 클래스명의 첫문자는 대문자로 해야 한다 
           class Animals 
             end
             # 클래스에는 initialize 메소드가 있어야 한다 
@@ -257,7 +259,7 @@
         end
         p1 = Pets.new  # Hi, my pet
         p2 = Pets.new  # Hi, my pet 
-
+    
         - 변수명 앞에 문자를 사용한다:
           class Pets 
             def initialize(name, age)
@@ -341,7 +343,7 @@
             class Person 
               def initialize(age)
                 @age = age end def show
-                puts "#@age} years = #{days_lived) days" 근제어
+                puts "#{@age} years = #{days_lived) days" 근제어
               end 
               private 
               def days_lived
@@ -349,18 +351,21 @@
               end 
             end
             protected: 클래스 자신과 자식클래스만 접근가능하다
+
             15. 모듈: 
             정의: 필요할때 로딩하여 사용할 수 있게 만들어진 Ruby(.rb)파일
             [Syntax]
             module명
-            end
-            로딩:
-            모듈을 로드할 때는 require를 사용한다
-            [Syntax] require '모듈명' # 필요시 디렉토리경로 써야 함
-    	    클래스 안에서 모듈을 로드할 때는 include 를 사용한다
-    	    module My_module
-    	        def greeting
-    	            puts "HI"
+             end
+                로딩:
+                모듈을 로드할 때는 require를 사용한다
+                [Syntax] require '모듈명' # 필요시 디렉토리경로 써야 함
+        	    클래스 안에서 모듈을 로드할 때는 include 를 사용한다
+        	    module My_module
+        	        def greeting
+        	     
+
+       puts "HI"
     	        end
     	    end
     	    
@@ -397,5 +402,5 @@ pusts person.name # John
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ2ODE1OTExNCwtNDcyMDUwMTcxXX0=
+eyJoaXN0b3J5IjpbNjc0OTE3MDU1LC00NzIwNTAxNzFdfQ==
 -->
