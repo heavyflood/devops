@@ -351,12 +351,17 @@
               end 
             end
             protected: 클래스 자신과 자식클래스만 접근가능하다
-
-            15. 모듈: 
-            정의: 필요할때 로딩하여 사용할 수 있게 만들어진 Ruby(.rb)파일
+       
+            
+       
+    
+    
+  
+ ## 모듈: 
+            정의: 필요할때 로딩하여 사용할 수 있게 만어진 Ruby(.rb)파일
             [Syntax]
             module명
-             end
+            end
                 로딩:
                 모듈을 로드할 때는 require를 사용한다
                 [Syntax] require '모듈명' # 필요시 디렉토리경로 써야 함
@@ -402,5 +407,5 @@ pusts person.name # John
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjc0OTE3MDU1LC00NzIwNTAxNzFdfQ==
+eyJoaXN0b3J5IjpbMTAwNDc3MTM2MSwtNDcyMDUwMTcxXX0=
 -->
