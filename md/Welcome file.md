@@ -264,9 +264,10 @@
               @name = name
               @age = age 
             end 
-         end
-            - Instance 메소드 : 클래스안의 일반적인 메소드
-              클래스밖에서 Instance 변수로 접근하기 위해 Getter/Setter메소드가 사용된다
+          end
+         
+          - Instance 메소드 : 클래스안의 일반적인 메소드
+            클래스밖에서 Instance 변수로 접근하기 위해 Getter/Setter메소드가 사용된다
               class Pets 
                 def initialize(name, age)
                   @name = name
@@ -288,16 +289,18 @@
             attr_reader - Getter 메소드와 동일
             attr_writer - Setter 메소드와 동일
             attr_accessor - Getter와 Setter 메소드 한번에
-            class Pets # 왼쪽 소스의 Getter와 Setter를 name이라는 이름으로 한번에 구현했다. 
+            class Pets # 왼쪽 소스의 Getter와 Setter를 name으로 한번에 구현
               attr_accessor name
-            | def initialize(name, age)
+              def initialize(name, age)
                 @name = name
                 @age = age 
               end
             end
+            
             p1 = Pets.new("Bbobby", 3) 
             p2 = Pets.new("Noorie", 6)
             p1.name("asd")
+           
             - 클래스 메소드: 클래스 자기자신이 직접호출할 수 있는 메소드
             self 키워드를 통해 정의할 수 있다
             class Pets 
@@ -311,7 +314,7 @@
               PI = 3.14
             end
             puts Calc::PI # 3.14
-            - to_s 메소드: 클래스객체를 출력할떄, 호출되는 메소드로 클래스내에 자동으로 Built-In됨
+            - to_s 메소드: 클래스객체를 출력시, 호출되는 메소드로 클래스내에 자동으로 Built-In
             - 상속: 
             상속받으면 부모클래스의 메소드 등을 사용가능: < 기호를 사용하여 상속받는다 
             class Dog < Animal # Dog class는 Animal 클래스를 상속받음
@@ -394,5 +397,5 @@ pusts person.name # John
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExMDM0NzY1OCwtNDcyMDUwMTcxXX0=
+eyJoaXN0b3J5IjpbLTQ2ODE1OTExNCwtNDcyMDUwMTcxXX0=
 -->
