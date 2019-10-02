@@ -299,28 +299,29 @@
                 @name = name
                 @age = age 
              end
-            end
+      end
             
-            p1 = Pets.new("Bbobby", 3) 
-            p2 = Pets.new("Noorie", 6)
-            p1.name("asd")
+      p1 = Pets.new("Bbobby", 3) 
+      p2 = Pets.new("Noorie", 6)
+      p1.name("asd")
            
-            - 클래스 메소드: 클래스 자기자신이 직접호출할 수 있는 메소드
-            self 키워드를 통해 정의할 수 있다
-            class Pets 
-                def self.greeting
-                    puts "Hi, my pet" 
-                end 
-            end 
-            Pets.greeting # 클래스명을 통해 직접 호출
-            - 클래스 상수(Const): 변하지 않는 값, 대문자로 시작해야하며 모두 대문자로 명명
-            class Calc
-              PI = 3.14
-            end
-            puts Calc::PI # 3.14
-            - to_s 메소드: 클래스객체를 출력시, 호출되는 메소드로 클래스내에 자동으로 Built-In
-            - 상속: 
-            상속받으면 부모클래스의 메소드 등을 사용가능: < 기호를 사용하여 상속받는다 
+     - 클래스 메소드: 클래스 자기자신이 직접호출할 수 있는 메소드
+     self 키워드를 통해 정의할 수 있다
+     class Pets 
+       def self.greeting
+          puts "Hi, my pet" 
+       end 
+     end 
+     Pets.greeting # 클래스명을 통해 직접 호출
+     
+     - 클래스 상수(Const): 변하지 않는 값, 대문자로 시작해야하며 모두 대문자로 명명
+      class Calc
+        PI = 3.14
+      end
+      puts Calc::PI # 3.14
+     
+     - to_s 메소드: 클래스객체를 출력시, 호출되는 메소드로 클래스내에 자동으로 Built-In
+     - 상속: 상속받으면 부모클래스의 메소드 등을 사용가능: < 기호를 사용하여 상속받는다 
             class Dog < Animal # Dog class는 Animal 클래스를 상속받음
             부모, 자식클래스에 동일이름의 메소드가 있을 때는 자기 클래스의 메소드가 우선순위가 높다
             super 메소드를 사용하면 부모클래스의 메소드도 수행된다
@@ -411,5 +412,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTcyOTkwMDQ0MCwtNDcyMDUwMTcxXX0=
+eyJoaXN0b3J5IjpbLTQ4MzA1NzUxNiwtNDcyMDUwMTcxXX0=
 -->
