@@ -367,19 +367,21 @@
              클래스 안에서 모듈을 로드할 때는 include 를 사용한다
              module My_module
                def greeting
-       puts "HI"
-    	               end
-    	          end
-    	    
-    	    class A
-    	      include My_module
-    	    end
-    	    모듈을 사용할떄는 다음 구문형식 사용
+                 puts "HI"
+               end
+             end
+             class A
+                include My_module
+             end
+             - 모듈을 사용할떄는 다음 구문형식 사용
     	    [Syntax1]
     	    모듈명.메소드명
     	    [Syntax2]
     	    모듈명::메소드명
-    	    15.구조체
+    	    
+    	
+
+    구조체
         -Structs : 
     
     Struct클래스를 통해 선언한다
@@ -404,5 +406,5 @@ pusts person.name # John
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyNzE4Mzk5NTMsLTQ3MjA1MDE3MV19
+eyJoaXN0b3J5IjpbLTEzODIyOTg2MCwtNDcyMDUwMTcxXX0=
 -->
