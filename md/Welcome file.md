@@ -362,17 +362,14 @@
             [Syntax]
             module명
             end
-                로딩:
-                모듈을 로드할 때는 require를 사용한다
-                [Syntax] require '모듈명' # 필요시 디렉토리경로 써야 함
-        	    클래스 안에서 모듈을 로드할 때는 include 를 사용한다
-        	    module My_module
-        	        def greeting
-        	     
-
+            로딩: 모듈을 로드할 때는 require를 사용한다
+             [Syntax] require '모듈명' # 필요시 디렉토리경로 써야 함
+             클래스 안에서 모듈을 로드할 때는 include 를 사용한다
+             module My_module
+               def greeting
        puts "HI"
-    	        end
-    	    end
+    	               end
+    	          end
     	    
     	    class A
     	      include My_module
@@ -407,5 +404,5 @@ pusts person.name # John
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTAwNDc3MTM2MSwtNDcyMDUwMTcxXX0=
+eyJoaXN0b3J5IjpbLTEyNzE4Mzk5NTMsLTQ3MjA1MDE3MV19
 -->
