@@ -191,7 +191,7 @@
   
 ## 메소드
 
-    - 기본메소드: .length, .reverse, .upcase, .downcase, .capitalize, .include, .gsub, .split, .floor ...
+    - 기본메소드: .length.reverse.upcase.downcase.capitalize.include.gsub.split ...
     - Custom메소드: 
     def로 선언한다.메소드명은 소문자로 시작한다
     def my_method(name, age)
@@ -343,19 +343,19 @@
        end
      
      - 접근제어: public, private, protected 지원
-      public: 모든 클래스는 별도 지정하지 않으면 기본적으로 public 이다.
-      private: 클래스 내부에서만 접근 가능하다.
+      1. public: 모든 클래스는 별도 지정하지 않으면 기본적으로 public 이다.
+      2. private: 클래스 내부에서만 접근 가능하다.
        class Person 
           def initialize(age)
              @age = age end def show
              puts "#{@age} years = #{days_lived) days"
           end 
           private 
-              def days_lived
-                @age * 365 
-              end 
-            end
-            protected: 클래스 자신과 자식클래스만 접근가능하다
+          def days_lived
+             @age * 365 
+          end 
+       end
+       3. protected: 클래스 자신과 자식클래스만 접근가능하다
        
      
 ## 모듈: 
@@ -414,5 +414,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODkxODQ4NDgsLTQ3MjA1MDE3MV19
+eyJoaXN0b3J5IjpbMzE0MzUyMTEyLC00NzIwNTAxNzFdfQ==
 -->
