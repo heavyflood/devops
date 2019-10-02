@@ -111,73 +111,80 @@
     
   
   9. 컬렉션 : 
-- 배열:
-1차원 배열 
-my_array = [1.2.3]
-my_array[0] # 반환값은 1
-2차원 배열 
-my_2d_array = [[1,2,31.[4,5,6]] 
-my 2d array[0][1] # 반환값은 2
-배열 마지막에 원소 추가 
-my_array.push(4) # my_array는 [1,2,3,4]
-배열의 마지막 원소 추출
-my_array.pop
-- 해쉬(해쉬생성/정렬):
-배열과 유사하나 index를 문자로 사용가능
-일종의 key-value쌍의 맵관 동일
-my_hash = {"A"=> 1, "B"=>2, "C" => 3} 
-my_hash[C] # 반환값은 3
-my hash[Bj = 4 #키 B 의 값이 20에서 4로 변경됨
-my_hash = Hash.new # my_hash = 과 동일 기능 // 해쉬 생성
-my_hash.sort_by do |key, value|
-    value 
-end
-해쉬를 사용하여 동일 Key를 사용할 때 메모리 낭비를 줄일 수 있다
-my_sym = animals 
-- 심볼
-여러 개의 해쉬에서 동일 Key를 사용해야 할 경우 유용하다
-my_hash1 = {":A"=>1. "B"=>2. "C" =>3}
-my_hash2 = {":A"=>4. "B" =>5, "C"=>6} # A,B,C는 my_hash1과 동일 메모리공간 사용!!
-puts my_hash1[:A]
-puts my_hash2[A] 
-- 반복자(.each, .tiles, .collect)
-배열이나 해쉬의 각 원소에 대해 순차적으로 코드블록의 내용을 수행한다.
-(해쉬에 사용)
-[Syntax] 해쉬명.each코드블록
-my_hash = {":A"=>1. "B"=>2. "C" =>3}
-my_hash.each do |key, value|
-    puts "#{key}:#{value}"
-end
-(배열에 사용)
-my_array = [1,2,3]
-my_array.each do |x|
-    puts x*2
-end // each
 
-정해진 횟수만큼 반복한다
-[Syntax] 횟수 times 코드블록
-5.times do 
-    puts "Hi! Ruby." 
-end
-// times
-배열 등의 각 원소값에 동일 작업을 한다.
-arr1 = [1,2,3,4,5] 
-arr2 = arr1.collect! {x|x*2}
+    - 배열:
+    1차원 배열 
+    my_array = [1.2.3]
+    my_array[0] # 반환값은 1
+    2차원 배열 
+    my_2d_array = [[1,2,31.[4,5,6]] 
+    my 2d array[0][1] # 반환값은 2
+    배열 마지막에 원소 추가 
+    my_array.push(4) # my_array는 [1,2,3,4]
+    배열의 마지막 원소 추출
+    my_array.pop
+    - 해쉬(해쉬생성/정렬):
+    배열과 유사하나 index를 문자로 사용가능
+    일종의 key-value쌍의 맵관 동일
+    my_hash = {"A"=> 1, "B"=>2, "C" => 3} 
+    my_hash[C] # 반환값은 3
+    my hash[Bj = 4 #키 B 의 값이 20에서 4로 변경됨
+    my_hash = Hash.new # my_hash = 과 동일 기능 // 해쉬 생성
+    my_hash.sort_by do |key, value|
+        value 
+    end
+    해쉬를 사용하여 동일 Key를 사용할 때 메모리 낭비를 줄일 수 있다
+    my_sym = animals 
+    - 심볼
+    여러 개의 해쉬에서 동일 Key를 사용해야 할 경우 유용하다
+    my_hash1 = {":A"=>1. "B"=>2. "C" =>3}
+    my_hash2 = {":A"=>4. "B" =>5, "C"=>6} # A,B,C는 my_hash1과 동일 메모리공간 사용!!
+    puts my_hash1[:A]
+    puts my_hash2[A] 
+    - 반복자(.each, .tiles, .collect)
+    배열이나 해쉬의 각 원소에 대해 순차적으로 코드블록의 내용을 수행한다.
+    (해쉬에 사용)
+    [Syntax] 해쉬명.each코드블록
+    my_hash = {":A"=>1. "B"=>2. "C" =>3}
+    my_hash.each do |key, value|
+        puts "#{key}:#{value}"
+    end
+    (배열에 사용)
+    my_array = [1,2,3]
+    my_array.each do |x|
+        puts x*2
+    end // each
+    
+    정해진 횟수만큼 반복한다
+    [Syntax] 횟수 times 코드블록
+    5.times do 
+        puts "Hi! Ruby." 
+    end
+    // times
+    배열 등의 각 원소값에 동일 작업을 한다.
+    arr1 = [1,2,3,4,5] 
+    arr2 = arr1.collect! {x|x*2}
+    
+   
+ ## 프로시져: 
 
-10. 프로시져: 
-Proc 클래스를 사용하여 선언할 수 있다. 
- [Syntax] 프로시져명 = Proc.new 코드블록
-pr1 = Proc.new {{x,yl x*y}
-프로시져를 호출할 땐 &다 .call을 사용한다. 
-pr1 = Proc.new {\x.yl x*y} 
-&pr1 2,3 #결과는 6 # 혹은 pr1.call 2,3
-11.람다
+    Proc 클래스를 사용하여 선언할 수 있다. 
+    [Syntax] 프로시져명 = Proc.new 코드블록
+    pr1 = Proc.new {{x,yl x*y}
+    
+    프로시져를 호출할 땐 &다 .call을 사용한다. 
+    pr1 = Proc.new {\x.yl x*y} 
+    &pr1 2,3 #결과는 6 # 혹은 pr1.call 2,3
+    
+    
+  ## 람다
  매개변수로 코드블록를 넘길 때 사용한다. 
  [Syntax] lambda 코드블록
 (예 1) a = lambda {Ixl x*3) puts a.call 6 # 180이 출력된다.
 | 모듈 로딩 el
 (예 2) str_array = ["leonardo", "donatello", "raphael", "michaelangelo") symbolize = lambda { Iss.to_sym} # symbolize 에 람다로 코드블록 저장 
 symbols = str_array.collect(&symbolize) # str_array 의 각 원소를 심볼로 변경
+
 12.메소드
 - 기본메소드: .length, .reverse, .upcase, .downcase, .capitalize, .include, .gsub, .split, .floor ...
 - Custom메소드: 
@@ -379,5 +386,5 @@ person.salary = 250
 pusts person.name # John
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjA0NjIxODE5MV19
+eyJoaXN0b3J5IjpbLTcyNjg3OTIyMF19
 -->
