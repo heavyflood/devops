@@ -16,31 +16,30 @@
     
     gem install rails # ruby on rails install
     rails --version
-    
-    ## Ruby Style
+
+
 
  Guide
 ===================================
 ## 자료형: 
 
     3가지의 자료형을 자동으로 인식 (numbers, boolean, strings)
-
+    
 ## 연산자: 
 
-    산술 : + (덧셈). - (뺄셈). * (곱셈). / (나눗셈) ** (거듭제곱 : 23은 2의 3승), % (나머지)
+    산술 : + (덧셈)- (뺄셈)* (곱셈)/ (나눗셈)** (거듭제곱), % (나머지)
     관계: == (같다). != 다르다) >, >= (크다. 크거나 같다) |< <= (작다. 작거나 같다)
     대입: = (조건부대입, 변수가 비어있는 경우에만 대입)
     논리: && (AND), |(OR)
-    3.
 
  ## 주석: 
 
     - 단일행주석: # 단일행 주석입니다
     - 복수행주석: 
-    	- =begin
-                   복수행주석
-                   입니다.
-                 =end
+    	 =begin
+    	   복수행주석
+    	   입니다.
+    	 =end
     
    ##  표준입출력
 
@@ -56,6 +55,7 @@
 ## 파일입출력
 
     - 파일생성: file=File.new('test.txt','w+')
+    
     - 파일열기: file=File.open('test.txt','w+')
    
     - 파일읽기: 
@@ -435,5 +435,5 @@
 
     
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzM0ODQ2MjQ0LC00NzIwNTAxNzFdfQ==
+eyJoaXN0b3J5IjpbMTM0MDc3NjUwNiwtNDcyMDUwMTcxXX0=
 -->
