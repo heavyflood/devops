@@ -178,61 +178,68 @@
     
     
   ## 람다
- 매개변수로 코드블록를 넘길 때 사용한다. 
- [Syntax] lambda 코드블록
-(예 1) a = lambda {Ixl x*3) puts a.call 6 # 180이 출력된다.
-| 모듈 로딩 el
-(예 2) str_array = ["leonardo", "donatello", "raphael", "michaelangelo") symbolize = lambda { Iss.to_sym} # symbolize 에 람다로 코드블록 저장 
-symbols = str_array.collect(&symbolize) # str_array 의 각 원소를 심볼로 변경
+ 
 
-12.메소드
-- 기본메소드: .length, .reverse, .upcase, .downcase, .capitalize, .include, .gsub, .split, .floor ...
-- Custom메소드: 
-def로 선언한다.메소드명은 소문자로 시작한다
-def my_method(name, age)
-    puts "I'm #{name}, I'm #{age} years old"
-end
+    매개변수로 코드블록를 넘길 때 사용한다. 
+     [Syntax] lambda 코드블록
 
-메소드 호출은 메소드명으로 호출한다
-def my_method(name, age) 
-    puts "I'm #{name}, I'm #{age} years old 
-end
-my_method("Mike", 26) # "Im Mike, I'm 26 years old"가 출력된다
+    (예 1) a = lambda {Ixl x*3) puts a.call 6 # 180이 출력된다.
+    (예 2) str_array = ["leonardo", "donatello", "raphael", "michaelangelo") 
+    symbolize = lambda { Iss.to_sym} # symbolize 에 람다로 코드블록 저장 
+    symbols = str_array.collect(&symbolize) # str_array 의 각 원소를 심볼로 변경
+    
+  
+## 메소드
 
-파라미터는 Default값 설정가능하다
-메소드 호출시 Argument를 지정하지 않으면 Default값으로 할당
-def my_method(name, age=30) 
-    puts "I'm #{name}, I'm #{age} years old 
-end
-my_method("Mike", 26)
-my_method("Mike")
-파라미터에 Optional파라미터를 설정할 수 있다.
-def my_method(*my_info) 
-    puts "I'm #{my_info[0]}, I'm #{my_info[1]} years old 
-end
-my_method("Mike", 26)
-return을 이용해 값을 반환할 수 있다
-def squares(a,b,c)
-    return a*a, b*b, c*c
-end
+    - 기본메소드: .length, .reverse, .upcase, .downcase, .capitalize, .include, .gsub, .split, .floor ...
+    - Custom메소드: 
+    def로 선언한다.메소드명은 소문자로 시작한다
+    def my_method(name, age)
+        puts "I'm #{name}, I'm #{age} years old"
+    end
+    
+    메소드 호출은 메소드명으로 호출한다
+    def my_method(name, age) 
+        puts "I'm #{name}, I'm #{age} years old 
+    end
+    my_method("Mike", 26) # "Im Mike, I'm 26 years old"가 출력된다
+    
+    파라미터는 Default값 설정가능하다
+    메소드 호출시 Argument를 지정하지 않으면 Default값으로 할당
+    def my_method(name, age=30) 
+        puts "I'm #{name}, I'm #{age} years old 
+    end
+    my_method("Mike", 26)
+    my_method("Mike")
+    파라미터에 Optional파라미터를 설정할 수 있다.
+    def my_method(*my_info) 
+        puts "I'm #{my_info[0]}, I'm #{my_info[1]} years old 
+    end
+    my_method("Mike", 26)
+    return을 이용해 값을 반환할 수 있다
+    def squares(a,b,c)
+        return a*a, b*b, c*c
+    end
+    
+    arr = squares(2,3,6)
+    puts arr
+    
+    메소드는 다른 메소드의 Argument로 사용가능
+    
+    - 변수유형: 어디서든 접근이 가능하다. 변수명 앞에 $문자를 사용한다.
+    $x = 5
+    
+    def change 
+        $x = 3
+    end
+    
+    change
+    puts $x # 3
+    13.클래스
+    - 선언/객체 생성: 
+    class키워드로 선언, 클래스명의 첫문
 
-arr = squares(2,3,6)
-puts arr
-
-메소드는 다른 메소드의 Argument로 사용가능
-
-- 변수유형: 어디서든 접근이 가능하다. 변수명 앞에 $문자를 사용한다.
-$x = 5
-
-def change 
-    $x = 3
-end
-
-change
-puts $x # 3
-13.클래스
-- 선언/객체 생성: 
-class키워드로 선언, 클래스명의 첫문자는 대문자로 해야 한다 :
+자는 대문자로 해야 한다 :
 class Animals 
 end
 클래스에는 initialize 메소드가 있어야 한다 :
@@ -385,6 +392,7 @@ person.age = 42
 person.salary = 250
 pusts person.name # John
 
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTcyNjg3OTIyMF19
+eyJoaXN0b3J5IjpbLTEyNDU4MTgzNTFdfQ==
 -->
