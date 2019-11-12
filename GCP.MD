@@ -48,6 +48,12 @@
 	chmod +x envsubst
 	sudo mv envsubst /usr/local/bin		
 
+## Make Jenkins Credential
+
+    kubectl -n kube-system create serviceaccount jenkins-serviceaccount
+    kubectl -n kube-system create rolebinding jenkins-rolebinding --clusterrole=cluster-admin --serviceaccount=kube-system:jenkins-serviceaccount
+    kubectl -n kube-system get secrets $(kubectl -n kube-system get serviceaccount jenkins-serviceaccount -o go-template --template='{{range .secrets}}{{.name}}{{"\n"}}{{end}}') -o go-template --template '{{index .data "token"}}' | base64 -d
+
 
 ## Kubernetesfile.yml
 
