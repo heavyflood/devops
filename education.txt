@@ -27,6 +27,8 @@
 
     sudo chmod +x /usr/local/bin/docker-compose
     // ==> docker-compose authorization 
+    
+    sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 3.  Install GitLab/Jenkins/Postgresql/Redmine/Docker-Registry With Docker-Compose
     
