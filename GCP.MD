@@ -13,6 +13,9 @@
             https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
     EOM
 
+## 인증
+    gcloud auth login
+
 ## gcloud config
 
     gcloud config set project [PROJECT_ID]
