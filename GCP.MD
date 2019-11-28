@@ -13,8 +13,6 @@
             https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
     EOM
 
-## 인증
-    gcloud auth login
 
 ## gcloud config
 
@@ -27,7 +25,9 @@
 ## Cluster 생성
 
     gcloud container clusters create gke-cluster --machine-type n1-standard-1 --zone us-central1-a --node-locations us-central1-a
-
+    
+    error 403 : request had insufficient authentication scopes 시
+    gcloud auth login
 
 ## Create a global IP address named kubernetes-ingress
 
