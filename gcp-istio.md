@@ -121,3 +121,113 @@ Credentials and permissions
     }
 
 
+## Deployment.yaml
+
+    # SERVICE
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${APP_NAME}-service
+      labels:
+        app: ${APP_NAME} 
+    spec:
+      selector: 
+        app: ${APP_NAME}
+      ports:
+      - name: http
+        protocol: TCP
+        port: 9092                                      
+        targetPort: 9092
+        
+    ---
+    # DEPOLOYMENT
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: ${APP_NAME}
+      labels:
+        app: ${APP_NAME}
+        version: v1
+    spec:
+      replicas: 2
+      revisionHistoryLimit: 2           # replicaset 이전버전 보관수
+      strategy:
+        type: RollingUpdate             # RollingUpdate에 대한 상세 설정. “Recreate” or “RollingUpdate”를 설정 가능 합니다. 기본값은 “RollingUpdate” 입니다. Recreate의 경우 Pod가 삭제된 후 재생성.
+        rollingUpdate:                  
+          maxSurge: 1                   # rolling update 중 정해진 Pod 수 이상으로 만들 수 있는 Pod의 최대 개수입니다. 기본값은 25%    
+          maxUnavailable: 1             # rolling update 중 unavailable 상태인 Pod의 최대 개수를 설정   
+      selector:
+        matchLabels:
+          app: ${APP_NAME}
+          version: v1
+      template:
+        metadata:
+          labels:
+            app: ${APP_NAME}
+            version: v1
+        spec:
+          containers:
+          - name: ${APP_NAME}
+            image: ${IMAGE}
+            imagePullPolicy: Always
+            ports:
+            - containerPort: 9092
+            resources:
+              requests:                 # Pod 스케쥴링의 기준. 컨테이너가 요청할 최소한의 리소스에 대한 설정입니다. Spring Boot 애플리케이션의 경우는 메모리 값을 256M 이상으로 설정                                    
+                memory: "256Mi"                                                
+                cpu: "200m"
+              limits:                   # 컨테이너가 최대한으로 사용할 리소스에 대한 설정입니다. 애플리케이션에 따라 적절한 CPU와 메모리 값으로 설정                                    
+                memory: "1Gi"                                                
+                cpu: "500m"
+            livenessProbe:              
+              exec:
+                command: ["sh", "-c", "cd /"]              
+              initialDelaySeconds: 30
+              periodSeconds: 30                    
+            readinessProbe:
+              exec:
+                command: ["sh", "-c", "cd /"]  
+              initialDelaySeconds: 30 # 컨테이너가 시작된 후 프로브를 보내기 전에 기다리는 시간
+              periodSeconds: 15       # 검사를 보내는 빈도. 보통 10~20초 사이로 세팅
+            lifecycle:                # 20 초의 동기식 유예 기간을 선택. 포드 종료 프로세스는이 대기 시간 후에 만 ​계속됨
+              preStop:
+                exec:
+                  command: ["sh", "-c", "sleep 20"]           
+            
+    ---
+    apiVersion: networking.istio.io/v1alpha3
+    kind: Gateway
+    metadata:
+      name: ${APP_NAME}-gateway
+    spec:
+      selector:
+        istio: ingressgateway # use istio default controller
+      servers:
+      - port:
+          number: 80
+          name: http
+          protocol: HTTP
+        hosts:
+        - "*"
+        
+    ---
+    apiVersion: networking.istio.io/v1alpha3
+    kind: VirtualService
+    metadata:
+      name: ${APP_NAME}-virtualservice
+    spec:
+      hosts:
+      - "*"
+      gateways:
+      - ${APP_NAME}-gateway
+      http:
+      - match:
+        - uri:
+            prefix: /caller
+        route:
+        - destination:
+            host: ${APP_NAME}-service.istio-system.svc.cluster.local
+            port:
+              number: 9092  
+              
+              
