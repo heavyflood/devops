@@ -1,3 +1,6 @@
+
+
+
 # redis cluster in kubernetes
 
 kubernetes(k8s) 노드가 다음과 같이 구성되어 있다고 가정하고 설치한다.
@@ -177,25 +180,29 @@ kubernetes(k8s) 노드가 다음과 같이 구성되어 있다고 가정하고 �
 
 ## redis 클러스터 master, worker, statefulset, service 생성
 
-kubectl apply -f redis-cluser.yaml  
+    kubectl apply -f redis-cluser.yaml  
+
   
 
 ## configmap, statefulset, service 확인
 
-kubectl describe cm --namespace redis-cluster  
-kubectl describe sts --namespace redis-cluster  
-kubectl describe svc --namespace redis-cluster  
+    kubectl describe cm --namespace redis-cluster  
+    kubectl describe sts --namespace redis-cluster  
+    kubectl describe svc --namespace redis-cluster  
+
   
 
 ## statefulset 에서 PersistentVolumeClaim(PVC) 상태 확인
 
  
-kubectl get pvc --namespace redis-cluster  
+
+    kubectl get pvc --namespace redis-cluster  
+
   
 
 ## POD 및 서비스 상태 확인
 
-kubectl get all --namespace redis-cluster  
+    kubectl get all --namespace redis-cluster  
 
 ## 클러스터링 구성
 
